@@ -5,7 +5,7 @@
 package model;
 
 /**
- *
+ *dd
  * @author angeldvvp
  */
 public class Compra {
