@@ -11,6 +11,7 @@ package model;
 import java.util.Date;
 
 public class Usuario {
+    
     private int ID_Administrador;
     private String NombreUsuario;
     private String Contraseña;
@@ -20,6 +21,8 @@ public class Usuario {
     private Date FechaRegistro;
 
     public Usuario() {
+        
+       
     }
 
     public Usuario(int ID_Administrador, String NombreUsuario, String Contraseña, String NombreCompleto,
