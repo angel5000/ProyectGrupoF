@@ -9,7 +9,7 @@ package model;
  * @author angeldvvp
  */
 public class Compra {
-    ///CONSTRUCTOR DE LA CALSE COMPRA
+    ///CONSTRUCTOR DE LA CALSE COMPRAsss
    
    public Compra(){
        //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
