@@ -18,15 +18,16 @@ import model.Cliente;
 import model.ConexionBD;
 
 public class AdmCliente {
+    //LIST DE LA CLAS CLIENTE
     public List<Cliente> listarClientes() {
         List<Cliente> clientes = new ArrayList<>();
         String query = "SELECT * FROM CLIENTE";
         
-        try (Connection conn = ConexionBD.conectar();
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             
-            while (rs.next()) {
+            while (rs.next()) {//RECORRIDO DE DATOS
                 Cliente cliente = new Cliente();
                 cliente.setID_cliente(rs.getInt("ID_cliente"));
                 cliente.setCedula(rs.getString("Cedula"));
@@ -46,7 +47,7 @@ public class AdmCliente {
         return clientes;
     }
     
-    public boolean guardarCliente(Cliente cliente) {
+    public boolean guardarCliente(Cliente cliente) {//INGRESO DE DATOS HACIA LA BD
         String query = "INSERT INTO CLIENTE (Cedula, nombres, Apellidos, Rol, Direccion, correo_electronico, Telefono, Fecha_Nacimineto) " +
                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         

@@ -21,10 +21,10 @@ public class Usuario {
     private Date FechaRegistro;
 
     public Usuario() {
-        
+         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
        
     }
-
+//CONSTRUCTOR LLENO
     public Usuario(int ID_Administrador, String NombreUsuario, String Contraseña, String NombreCompleto,
             String CorreoElectronico, int Rol, Date FechaRegistro) {
         this.ID_Administrador = ID_Administrador;
@@ -35,7 +35,7 @@ public class Usuario {
         this.Rol = Rol;
         this.FechaRegistro = FechaRegistro;
     }
-
+//SET Y GETS
     public int getID_Administrador() {
         return ID_Administrador;
     }

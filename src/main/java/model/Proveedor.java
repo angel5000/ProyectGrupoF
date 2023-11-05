@@ -9,6 +9,7 @@ package model;
  * @author angeldvvp
  */
 public class Proveedor {
+   
     private int ID_proveedor;
     private String nombre_proveedor;
     private String Tipo_Proveedor;
@@ -18,8 +19,9 @@ public class Proveedor {
     private String telefono;
 
     public Proveedor() {
+         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
     }
-
+//CONSTRUCTOR LLENO
     public Proveedor(int ID_proveedor, String nombre_proveedor, String Tipo_Proveedor, String RUC, String direccion,
             String Correo_electronico, String telefono) {
         this.ID_proveedor = ID_proveedor;
@@ -31,6 +33,7 @@ public class Proveedor {
         this.telefono = telefono;
     }
 
+    //SET Y GETS
     public int getID_proveedor() {
         return ID_proveedor;
     }

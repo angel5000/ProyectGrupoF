@@ -9,11 +9,13 @@ package model;
  * @author angeldvvp
  */
 public class Productos extends Proveedor{
+    //CLASE PRODUCTOS CON HERENCIA A PROVEEDOR
      byte Imagen; private String Nombre=""; private int cantidad; 
     private String tipo; private String Marca; private String Detalles; private float precio;String Nserie; String Proveedor;
     public Productos(){
-        
+         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
     }
+    //CONSTRUCTOR
    public Productos(int ID_proveedor, String nombre_proveedor, String Tipo_Proveedor, String RUC, String direccion,
             String Correo_electronico, String telefono,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
        super(ID_proveedor, nombre_proveedor,Tipo_Proveedor,RUC,direccion, Correo_electronico,telefono);
@@ -27,7 +29,7 @@ public class Productos extends Proveedor{
        this.precio=precio;
                
    }
-
+//SET Y GETS
     public byte getImagen() {
         return Imagen;
     }

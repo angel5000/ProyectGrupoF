@@ -9,14 +9,15 @@ package model;
  * @author angeldvvp
  */
 public class Compra {
-    
+    ///CONSTRUCTOR DE LA CALSE COMPRA
    
    public Compra(){
-       
+       //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
    }
     byte Imagen; private String Nombre=""; private int cantidad; 
     private String tipo; private String Marca; private String Detalles; private float precio;
     String idUsua="";
+    //CONSTRUCTOR 
    public Compra(String idUsua,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
       
        
@@ -30,7 +31,7 @@ public class Compra {
        this.precio=precio;
          
    }
-
+///METODOS SET Y GETS
     public byte getImagen() {
         return Imagen;
     }
