@@ -61,17 +61,26 @@ ID_Invent INT PRIMARY KEY IDENTITY(1,1) not null,
 NombreProducto NVARCHAR(100),
 Stock INT,
 Fecha_Ingreso date,
+Imagen varbinary(max),
 PrecioUnitario DECIMAL(10, 2)
 
 );
+/*
+alter table INVENTARIO
+add Imagen varbinary(max) */
 
+select*from INVENTARIO
 INSERT INTO INVENTARIO ( NombreProducto,Stock ,Fecha_Ingreso,PrecioUnitario)
 VALUES
     ( 'Perno',10,'10/10/20',10.2),
     ('Perno',20,'10/10/23', 5),
     ('Tuerca',50,'10/10/22',0.5),
     ('Tuerca',100,'10/10/21',0.7);
-
+	
+	
+	UPDATE  INVENTARIO
+SET Imagen = (SELECT * FROM OPENROWSET(BULK N'C:\Users\angeldvvp\Desktop\Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta\BD\imagenes\Pernohexagonal.jpg', SINGLE_BLOB) AS Imagen)
+WHERE ID_Invent = 1
 
 	DELETE FROM Inventario ;
 	DELETE FROM Detalles_Productos ;
@@ -110,19 +119,39 @@ CREATE TABLE CATALOGO_PRODUCTO(
 ID_cata INT PRIMARY KEY IDENTITY(001,1),
 Producto INT,
 Detalle_Producto INT,
+Disponible char(1),
 CONSTRAINT fk_invent FOREIGN KEY (Producto ) REFERENCES INVENTARIO(ID_Invent),
 CONSTRAINT fk_Detallprd FOREIGN KEY (Detalle_Producto ) REFERENCES Detalles_Productos(ID_DetallesPRD)
 );
+
 INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
 VALUES
     ( 1, 5);
 sELECT
     C.ID_cata,
-    IP.NombreProducto AS ProductoInventario,
-    DP.Descripcion AS DetalleDescripcion
-FROM CATALOGO_PRODUCTO C
-LEFT JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent
-LEFT JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD;
+    IP.NombreProducto,
+    DP.Descripcion, IP.PrecioUnitario,IP.Imagen
+FROM CATALOGO_PRODUCTO AS C
+ JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent
+JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD;
+select*from INVENTARIO
+create table Carrito(
+ID_carrito	INT primary key identity (1,1),
+ID_cliente INT,
+ID_producto int,
+ID_detallesProd int,
+CONSTRAINT fk_dtclientecr   FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_CLIENTE),
+CONSTRAINT fk_productcr  FOREIGN KEY (ID_Producto) REFERENCES INVENTARIO(ID_Invent),
+CONSTRAINT fk_detprocr  FOREIGN KEY (ID_DetallesProd) REFERENCES Detalles_productos(ID_DetallesPRD)
+);
+INSERT INTO Carrito (ID_cliente,ID_producto,ID_detallesProd)
+VALUES
+    ( 100, 1,5);
+
+
+	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen From Carrito AS C 
+                 JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent 
+                 JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD;
 
 
 CREATE TABLE COMPRA(
