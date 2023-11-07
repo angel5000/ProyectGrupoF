@@ -15,19 +15,32 @@ import java.sql.SQLException;
 
 public class ConexionBD {
     private static final String HOSTNAME = "localhost";
-    private static final String SQL_INSTANCE_NAME = "NITRO-5";
-    private static final String SQL_DATABASE = "TuercaTornillo";
-    private static final String SQL_USER = "usersql";
-    private static final String SQL_PASSWORD = "root";
+    private static final String SQL_INSTANCE_NAME = "DESKTOP-BUQ5QOC";
+    private static final String SQL_DATABASE = "Ferreteria";
+    private static final String SQL_USER = "sa";
+    private static final String SQL_PASSWORD = "Angpro500";
 
     public static Connection conectar() throws SQLException {
         try {
+            
+            
+            
+        String hostname = "localhost";
+            String sqlInstanceName = "DESKTOP-BUQ5QOC"; //computer name 
+            String sqlDatabase = "Ferreteria";  //sql server database name
+            String sqlUser = "sa";
+            String sqlPassword = "Angpro500"; //passwrod sa account
+
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            String connectURL = "jdbc:sqlserver://" + HOSTNAME + ":1433"
-                    + ";instance=" + SQL_INSTANCE_NAME + ";databaseName=" + SQL_DATABASE
-                    + ";user=" + SQL_USER + ";password=" + SQL_PASSWORD;
-            Connection conn = DriverManager.getConnection(connectURL);
+
+            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
+           String connectURL = "jdbc:sqlserver://localhost:1433;instance="+sqlInstanceName +";databaseName="+sqlDatabase+ ";encrypt=true;trustServerCertificate=true;";
+
+            Connection conn = DriverManager.getConnection(connectURL,sqlUser,sqlPassword);
+            System.out.println("Connect to database successful!!"); 
+     
             return conn;
+            
         } catch (ClassNotFoundException e) {
             throw new SQLException("Error al cargar el controlador JDBC: " + e.getMessage());
         }

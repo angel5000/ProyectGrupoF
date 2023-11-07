@@ -4,6 +4,27 @@
  */
 package Visual;
 
+import Control.AdmCompra;
+import Control.AdmInventario;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import model.CarCompras;
+import model.Catalogo;
+import model.Inventario;
+
 /**
  *
  * @author angeldvvp
@@ -13,8 +34,25 @@ public class CarritoCompras extends javax.swing.JFrame {
     /**
      * Creates new form CarritoCompras
      */
+    AdmCompra adcrp;
+    JPanel pan1 ,panft;
     public CarritoCompras() {
         initComponents();
+        FrmCompras fr = new FrmCompras();
+        int anchoVentanaPrincipal = fr .getWidth();
+        int altoVentanaPrincipal = fr.getHeight();
+
+        // Calcula las coordenadas x e y para el centro de la ventana principal
+        int x = fr.getX() + (anchoVentanaPrincipal - this.getWidth()) / 2;
+        int y = fr.getY() + (altoVentanaPrincipal -this.getHeight()) / 2;
+
+        // Establece las coordenadas de la ventana secundaria
+        this.setLocation(x, y);
+        
+        mostrarlista();
+        
+        
+        
     }
 
     /**
@@ -28,15 +66,95 @@ public class CarritoCompras extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        contenedor = new javax.swing.JPanel();
+        elemt = new javax.swing.JPanel();
+        pnfoto = new javax.swing.JPanel();
+        lbnbele = new javax.swing.JLabel();
+        btquitar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista de Compras"));
+
+        contenedor.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista"));
+
+        pnfoto.setBackground(new java.awt.Color(204, 255, 102));
+        pnfoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        javax.swing.GroupLayout pnfotoLayout = new javax.swing.GroupLayout(pnfoto);
+        pnfoto.setLayout(pnfotoLayout);
+        pnfotoLayout.setHorizontalGroup(
+            pnfotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 93, Short.MAX_VALUE)
+        );
+        pnfotoLayout.setVerticalGroup(
+            pnfotoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 76, Short.MAX_VALUE)
+        );
+
+        lbnbele.setText("elenom");
+
+        btquitar.setText("Quitar");
+        btquitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btquitarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout elemtLayout = new javax.swing.GroupLayout(elemt);
+        elemt.setLayout(elemtLayout);
+        elemtLayout.setHorizontalGroup(
+            elemtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(elemtLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbnbele)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
+                .addComponent(btquitar)
+                .addGap(31, 31, 31))
+        );
+        elemtLayout.setVerticalGroup(
+            elemtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(elemtLayout.createSequentialGroup()
+                .addGroup(elemtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(elemtLayout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(elemtLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(elemtLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btquitar)
+                            .addComponent(lbnbele))))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout contenedorLayout = new javax.swing.GroupLayout(contenedor);
+        contenedor.setLayout(contenedorLayout);
+        contenedorLayout.setHorizontalGroup(
+            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contenedorLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(elemt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        contenedorLayout.setVerticalGroup(
+            contenedorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(contenedorLayout.createSequentialGroup()
+                .addComponent(elemt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 190, Short.MAX_VALUE))
+        );
+
+        jScrollPane1.setViewportView(contenedor);
 
         jTextField1.setText("jTextField1");
 
@@ -57,7 +175,7 @@ public class CarritoCompras extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
                         .addGap(15, 15, 15))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -84,6 +202,11 @@ public class CarritoCompras extends javax.swing.JFrame {
         jLabel1.setText("Carrito de Compras");
 
         jButton1.setText("Cerrar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -108,7 +231,7 @@ public class CarritoCompras extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -117,9 +240,120 @@ public class CarritoCompras extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    class RemItemActionListener implements ActionListener {
+    private CarCompras item;
+
+    public RemItemActionListener(CarCompras item) {
+        this.item = item;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        
+        //System.out.println(item.getIdelemnt());
+       
+            //System.out.println(  catalogo.getIdcata());
+            if(adcrp.RemoverItem(item.getIdelemnt())==1){
+               String nombrePanelAEliminar = item.getIdelemnt() + "";
+               // adcpr.IngresarItemCarrito(c.getIdcata());
+               for (Component componente : contenedor.getComponents()) {
+    if (componente instanceof JPanel && nombrePanelAEliminar.equals(componente.getName())) {
+        contenedor.remove(componente);
+        contenedor.revalidate(); // Actualiza el contenedor
+        contenedor.repaint(); // Repinta el contenedor
+        break; // Si se encuentra y elimina un panel con el nombre, puedes salir del bucle
+    }
+}
+               
+               
+              JOptionPane.showMessageDialog(null, "Eliminado del carrito");
+            }else{
+               // JOptionPane.showMessageDialog(null, "Ya esta ingresado en el carrito");
+            }
+            
+        
+    }
+}
+    
+    
+    
+    public void mostrarlista(){
+    
+     adcrp = new AdmCompra();
+        contenedor.setLayout(new GridLayout(0,1,10,10));
+      //  elemt.setLayout(null);
+         contenedor.remove(elemt);
+     int id=0;
+ 
+        for(CarCompras dt:adcrp.Carrito()){
+         pan1= new JPanel();
+         panft = new JPanel();
+ 
+              lbnbele=new JLabel("xxxxxxxxx");
+                JLabel lbft = new JLabel();
+          btquitar= new JButton("Remover");
+          id=dt.getIdelemnt();
+          btquitar.setName(id+"");
+          pan1.setName(id+"");
+             btquitar.addActionListener(new RemItemActionListener(dt));
+panft.setPreferredSize(new Dimension(100, 100));
+             
+             
+               pan1.setBackground(Color.red);
+               pnfoto.setBackground(pnfoto.getBackground());
+               lbnbele.setText(dt.getNombre()+""+dt.getDetalles());
+               
+               
+    BufferedImage imagen = dt.img();
+
+    if (imagen != null) {
+        // Crea un ImageIcon con la imagen
+        ImageIcon icono = new ImageIcon(imagen);
+
+     
+       lbft.setIcon(icono);
+
+    }
+panft.add(lbft);
+
+    pan1.add( panft);
+ 
+     pan1.add(lbnbele);
+     
+ pan1.add(btquitar);
+   
+  contenedor.add(pan1);
+    
+         contenedor.updateUI();
+             
+        } 
+    
+}
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        
+           
+        
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+   
+        
+      
+        
+        
+        
+    }//GEN-LAST:event_formWindowActivated
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btquitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btquitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btquitarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -157,6 +391,9 @@ public class CarritoCompras extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btquitar;
+    private javax.swing.JPanel contenedor;
+    private javax.swing.JPanel elemt;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -164,5 +401,7 @@ public class CarritoCompras extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel lbnbele;
+    private javax.swing.JPanel pnfoto;
     // End of variables declaration//GEN-END:variables
 }

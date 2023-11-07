@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.awt.image.BufferedImage;
+
 
 /**
  *
@@ -14,8 +16,17 @@ public class Inventario extends Productos{
     public Inventario(){
         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
     }
+    String datos;BufferedImage imagen;
+    public Inventario(String datos, BufferedImage imagen){
+        this.datos=datos;
+        this.imagen=imagen;
+    }
     String UbicAlmacen;
     //CONSTRUCTOR
+    public Inventario( String nombre_proveedor,String Nombre,BufferedImage imagen, int cantidad, String tipo, String Marca, String Detalles, float precio){
+        
+    }
+    
     public Inventario(int ID_proveedor, String nombre_proveedor, String Tipo_Proveedor, String RUC, String direccion,
             String Correo_electronico, String telefono,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio, String UbicAlma){
        super( ID_proveedor,  nombre_proveedor,  Tipo_Proveedor, RUC,  direccion,
@@ -23,6 +34,13 @@ public class Inventario extends Productos{
        this.UbicAlmacen=UbicAlma;
     }
 //SET Y GETS
+    
+    public String getdatos(){
+        return datos;
+    }
+    public BufferedImage img(){
+        return imagen;
+    }
     public String getUbicAlmacen() {
         return UbicAlmacen;
     }
