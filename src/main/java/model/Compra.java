@@ -4,7 +4,7 @@ package model;
 import java.util.Date;
 
 /**
- *
+ *dd
  * @author angeldvvp
  */
 public class Compra extends CarCompras {
