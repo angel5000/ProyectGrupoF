@@ -6,6 +6,7 @@ package Visual;
 
 import Control.AdmCompra;
 import Control.AdmInventario;
+import Control.Exceptions;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -37,19 +38,25 @@ public class CarritoCompras extends javax.swing.JFrame {
     AdmCompra adcrp;
     JPanel pan1 ,panft;
     public CarritoCompras() {
-        initComponents();
-        FrmCompras fr = new FrmCompras();
-        int anchoVentanaPrincipal = fr .getWidth();
-        int altoVentanaPrincipal = fr.getHeight();
-
-        // Calcula las coordenadas x e y para el centro de la ventana principal
-        int x = fr.getX() + (anchoVentanaPrincipal - this.getWidth()) / 2;
-        int y = fr.getY() + (altoVentanaPrincipal -this.getHeight()) / 2;
-
-        // Establece las coordenadas de la ventana secundaria
-        this.setLocation(x, y);
         
-        mostrarlista();
+            initComponents();
+            FrmCompras fr = new FrmCompras();
+            int anchoVentanaPrincipal = fr .getWidth();
+            int altoVentanaPrincipal = fr.getHeight();
+            
+            // Calcula las coordenadas x e y para el centro de la ventana principal
+            int x = fr.getX() + (anchoVentanaPrincipal - this.getWidth()) / 2;
+            int y = fr.getY() + (altoVentanaPrincipal -this.getHeight()) / 2;
+            
+            // Establece las coordenadas de la ventana secundaria
+            this.setLocation(x, y);
+            try {
+            mostrarlista();
+        } catch (Exceptions ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         
         
@@ -120,7 +127,7 @@ public class CarritoCompras extends javax.swing.JFrame {
                 .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lbnbele)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 376, Short.MAX_VALUE)
                 .addComponent(btquitar)
                 .addGap(31, 31, 31))
         );
@@ -175,13 +182,13 @@ public class CarritoCompras extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
                         .addGap(15, 15, 15))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 179, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
@@ -220,10 +227,10 @@ public class CarritoCompras extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(232, 232, 232)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(308, 308, 308))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,9 +239,9 @@ public class CarritoCompras extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -278,14 +285,15 @@ public class CarritoCompras extends javax.swing.JFrame {
     
     
     
-    public void mostrarlista(){
-    
+    public void mostrarlista() throws Exceptions, SQLException{
+   
      adcrp = new AdmCompra();
         contenedor.setLayout(new GridLayout(0,1,10,10));
       //  elemt.setLayout(null);
          contenedor.remove(elemt);
      int id=0;
  
+       
         for(CarCompras dt:adcrp.Carrito()){
          pan1= new JPanel();
          panft = new JPanel();
@@ -302,7 +310,8 @@ panft.setPreferredSize(new Dimension(100, 100));
              
                pan1.setBackground(Color.red);
                pnfoto.setBackground(pnfoto.getBackground());
-               lbnbele.setText(dt.getNombre()+""+dt.getDetalles());
+               lbnbele.setText("Nombre: \n "
+                       + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());
                
                
     BufferedImage imagen = dt.img();
@@ -315,6 +324,7 @@ panft.setPreferredSize(new Dimension(100, 100));
        lbft.setIcon(icono);
 
     }
+        
 panft.add(lbft);
 
     pan1.add( panft);

@@ -83,7 +83,8 @@ public class AdmInventario {
          byte[] imagenEnBytes=null;
         try {
           
-      String rutaImagen = "C:/Users/angeldvvp/Desktop/Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta/BD/imagenes/Pernohexagonal.jpg"; // Reemplaza con la ruta de tu imagen
+      String rutaImagen = "C:/Users/angeldvvp/Desktop/Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta/BD/imagenes/"
+              + "Pernohexagonal.jpg"; // Reemplaza con la ruta de tu imagen
 
             File imagen = new File(rutaImagen);
             FileInputStream fileInputStream = new FileInputStream(imagen);

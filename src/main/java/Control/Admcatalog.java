@@ -77,5 +77,45 @@ public class Admcatalog {
          
          return catalogo;
      }
+     
+     public void Buscar(String busqueda){
+         String sql = "SELECT CATALOGO_PRODUCTO.*, INVENTARIO.NombreProducto " +
+                     "FROM CATALOGO_PRODUCTO " +
+                     "INNER JOIN INVENTARIO ON CATALOGO_PRODUCTO.Producto = INVENTARIO.ID_Invent " +
+                     "WHERE INVENTARIO.NombreProducto LIKE ?";
+
+        try (Connection conn = ConexionBD.conectar();
+                PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, "%" + busqueda + "%"); // El % se usa para buscar coincidencias parciales
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                // Recupera los datos de las columnas
+                int idCata = resultSet.getInt("ID_cata");
+                int productoId = resultSet.getInt("Producto");
+                int detalleProductoId = resultSet.getInt("Detalle_Producto");
+                String disponible = resultSet.getString("Disponible");
+                String nombreProducto = resultSet.getString("NombreProducto");
+             
+                System.out.println("ID_Cata: " + idCata);
+                System.out.println("Producto ID: " + productoId);
+                System.out.println("Detalle Producto ID: " + detalleProductoId);
+                System.out.println("Disponible: " + disponible);
+                System.out.println("Nombre Producto: " + nombreProducto);
+                // Resto de las columnas
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+     }
+     
+     
+     
+     
+     
+     
+     
+     
     
 }

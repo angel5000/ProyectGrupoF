@@ -76,7 +76,12 @@ VALUES
     ('Perno',20,'10/10/23', 5),
     ('Tuerca',50,'10/10/22',0.5),
     ('Tuerca',100,'10/10/21',0.7);
-	
+
+	('Tuercas',10,'10/10/20',4.2),
+    ('Tuercas',20,'10/10/23', 2.5),
+    ('Tornillos',50,'10/10/22',1.5),
+    ('Herramientas',100,'10/10/21',20.30),
+	('Herramientas',100,'10/10/21',15.50);
 	
 	UPDATE  INVENTARIO
 SET Imagen = (SELECT * FROM OPENROWSET(BULK N'C:\Users\angeldvvp\Desktop\Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta\BD\imagenes\Pernohexagonal.jpg', SINGLE_BLOB) AS Imagen)
@@ -107,13 +112,29 @@ add CONSTRAINT fk_DetallesPrd FOREIGN KEY (ProductoID) REFERENCES INVENTARIO(ID_
 alter table Detalles_Productos
 drop constraint fk_DetallesPrd ;
 
+select*from Detalles_Productos
 INSERT INTO Detalles_Productos ( ProductoID, Categoria,Marca,Descripcion)
 VALUES
     ( 1, 'Perno','STANLEY0','Perno hexagonal de acero inoxidable, 1/4" x 2"'),
     (2,'Perno','STANLEY1', 'Perno galvanizado, 1/4" x 1.5"'),
     (3, 'Perno','STANLEY2','Tuerca hexagonal de acero, 1/4"'),
     (4, 'Perno','STANLEY3','Tuerca hexagonal de acero galvanizado, 3/8"');
+	INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
+VALUES (5, 'Tuercas', 'BOSCH', 'Tuerca de acero inoxidable, tamaño M8');
 
+-- Insertar un perno
+INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
+VALUES (6, 'Pernos', 'DEWALT', 'Perno de acero galvanizado, tamaño M10');
+
+-- Insertar un tornillo
+INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
+VALUES (7, 'Tornillos', 'BLACK&DECKER', 'Tornillo de cabeza hexagonal, tamaño M6');
+
+-- Insertar una herramienta
+INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
+VALUES (8, 'Herramientas', 'DOLMAR', 'Llave inglesa ajustable de 8 pulgadas');
+INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
+VALUES (9, 'Herramientas', 'DOLMAR', 'Llave M10');
 
 CREATE TABLE CATALOGO_PRODUCTO(
 ID_cata INT PRIMARY KEY IDENTITY(001,1),
@@ -127,29 +148,67 @@ CONSTRAINT fk_Detallprd FOREIGN KEY (Detalle_Producto ) REFERENCES Detalles_Prod
 INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
 VALUES
     ( 1, 5);
+
+	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 2, 6);
+	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 3, 7);
+	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 4, 8);
+	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 5, 9);
+
+
 sELECT
     C.ID_cata,
-    IP.NombreProducto,
+    c.Producto,C.Detalle_Producto,IP.NombreProducto,
     DP.Descripcion, IP.PrecioUnitario,IP.Imagen
 FROM CATALOGO_PRODUCTO AS C
  JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent
 JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD;
+
+SELECT  INVENTARIO.NombreProducto,Detalles_Productos.Descripcion, Detalles_Productos.Marca
+FROM CATALOGO_PRODUCTO
+INNER JOIN INVENTARIO ON CATALOGO_PRODUCTO.Producto = INVENTARIO.ID_Invent 
+INNER JOIN Detalles_Productos ON CATALOGO_PRODUCTO.Detalle_Producto = Detalles_Productos.ID_DetallesPRD 
+WHERE INVENTARIO.NombreProducto LIKE 'perno';
+
+
+
+
+
+
+
+
+
+
 select*from INVENTARIO
 create table Carrito(
 ID_carrito	INT primary key identity (1,1),
 ID_cliente INT,
 ID_producto int,
 ID_detallesProd int,
+antidad int,
 CONSTRAINT fk_dtclientecr   FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_CLIENTE),
 CONSTRAINT fk_productcr  FOREIGN KEY (ID_Producto) REFERENCES INVENTARIO(ID_Invent),
 CONSTRAINT fk_detprocr  FOREIGN KEY (ID_DetallesProd) REFERENCES Detalles_productos(ID_DetallesPRD)
 );
+select*from carrito;
+
+
+IF EXISTS (SELECT 1 FROM Carrito WHERE ID_Producto = 1 AND ID_cliente=100) SELECT 1 ELSE SELECT 0
+
+           
 INSERT INTO Carrito (ID_cliente,ID_producto,ID_detallesProd)
 VALUES
     ( 100, 1,5);
 
 
-	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen From Carrito AS C 
+	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen, ID_producto From Carrito AS C 
                  JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent 
                  JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD;
 
