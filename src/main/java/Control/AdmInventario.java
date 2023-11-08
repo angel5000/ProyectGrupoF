@@ -25,10 +25,11 @@ import model.Inventario;
  *
  * @author angeldvvp
  */
+
 public class AdmInventario {
     Inventario inv = new Inventario();
     List< Inventario> inventario = new ArrayList<>();
-    byte a;
+   ////MUESTRA CIERTOS DATOS QUE HAY EN INVENTARIO
     public List<Inventario> inv(){
           //List<String> inventario2 = new ArrayList<>();
         String query = "SELECT * FROM INVENTARIO";
@@ -79,12 +80,15 @@ public class AdmInventario {
     
         return inventario2;
     }
+    
+    
+    ///CONVERTIDOR DE LA IMAGEN A BYTE
     public byte[] img(){
          byte[] imagenEnBytes=null;
         try {
           
       String rutaImagen = "C:/Users/angeldvvp/Desktop/Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta/BD/imagenes/"
-              + "Pernohexagonal.jpg"; // Reemplaza con la ruta de tu imagen
+              + "Pernohexagonal.jpg"; 
 
             File imagen = new File(rutaImagen);
             FileInputStream fileInputStream = new FileInputStream(imagen);
@@ -106,6 +110,7 @@ public class AdmInventario {
         return imagenEnBytes;
     }
     
+    //ENVIA LA IMAGEN A LA TABLA
     public void imageninv(){
             try {
            
@@ -113,13 +118,11 @@ public class AdmInventario {
             String sql = "UPDATE INVENTARIO SET Imagen = ? WHERE ID_Invent = ?";
 Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareStatement(sql);
-            // Supongamos que tienes los datos binarios de la nueva imagen y el ID de la fila a actualizar
+           
             byte[] nuevaImagen = img();
             int idInventarioAActualizar = 1; // ID de la fila a actualizar
 
-          
-
-            // Establece los valores en la consulta
+      
             stmt.setBytes(1, nuevaImagen);
            stmt.setInt(2, idInventarioAActualizar);
 

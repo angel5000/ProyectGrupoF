@@ -17,9 +17,11 @@ public class Catalogo extends Inventario {
  BufferedImage imagen;
  int idcata=0,idprod, iddetall ;
     public Catalogo(){
-        
+        //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
         
     }
+    
+     //CONSTRUCTOR DE DATOS RESUMIDOS
     public Catalogo(int id,int idprod,int iddetall ,String datos ,BufferedImage Imagen){
         this.idprod=idprod;
         this.iddetall=iddetall;
@@ -27,7 +29,7 @@ public class Catalogo extends Inventario {
         this.datos=datos;
        this.imagen=Imagen;
     }
-    
+     //CONSTRUCTOR
     
     public Catalogo(String nombre_proveedor,String Nombre,BufferedImage imagen, int cantidad, String tipo, String Marca, 
             String Detalles, float precio, char disponible){

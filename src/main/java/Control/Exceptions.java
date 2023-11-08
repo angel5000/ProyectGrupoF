@@ -8,6 +8,7 @@ package Control;
  *
  * @author angeldvvp
  */
+//CLASE PRINCIPAL DE MANEJO DE EXCEPCIONES
 public class Exceptions  extends Exception{
     public Exceptions(String Error) {
         super(Error);

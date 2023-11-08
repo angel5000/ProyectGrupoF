@@ -17,6 +17,8 @@ public class Inventario extends Productos{
         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
     }
     String datos;BufferedImage imagen;
+    
+    //CONSTRUCTOR DE DATOS RESUMIDOS
     public Inventario(String datos, BufferedImage imagen){
         this.datos=datos;
         this.imagen=imagen;
