@@ -13,9 +13,7 @@ public class Compra extends CarCompras {
    public Compra(){
        //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
    }
-   /*byte Imagen; private String Nombre=""; private int cantidad; 
-    private String tipo; private String Marca; private String Detalles; private float precio;
-    String idUsua="",*/ Date FechaCompra;
+   Date FechaCompra;
     //CONSTRUCTOR 
    public Compra(int idUsua,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio, Date FechaCompra){
       

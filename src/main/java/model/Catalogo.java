@@ -29,6 +29,12 @@ public class Catalogo extends Inventario {
         this.datos=datos;
        this.imagen=Imagen;
     }
+    public Catalogo(int id, String datos ,BufferedImage Imagen){
+     
+        this.idcata=id;
+        this.datos=datos;
+       this.imagen=Imagen;
+    }
      //CONSTRUCTOR
     
     public Catalogo(String nombre_proveedor,String Nombre,BufferedImage imagen, int cantidad, String tipo, String Marca, 

@@ -161,7 +161,13 @@ VALUES
 	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
 VALUES
     ( 5, 9);
-
+	INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 6, 10);
+		INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
+VALUES
+    ( 7, 11);
+	select*from inventario
 
 sELECT
     C.ID_cata,

@@ -10,6 +10,7 @@ import Control.AdmInventario;
 import Control.Admcatalog;
 import Control.Exceptions;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -35,7 +36,8 @@ public class FrmCompras extends javax.swing.JFrame {
      * Creates new form FrmProductos
      */
     Admcatalog ct;
-    AdmCompra adcpr = new AdmCompra();int cantidad=0;
+    AdmCompra adcpr = new AdmCompra();int cantidad=1;
+      JPanel pan1 ,panft;
       SpinnerModel modelo;
     public FrmCompras() {
         initComponents();
@@ -64,16 +66,18 @@ public class FrmCompras extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtbuscar = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
         scrol = new javax.swing.JScrollPane();
         panelconten = new javax.swing.JPanel();
         panelem = new javax.swing.JPanel();
         btadd = new javax.swing.JButton();
-        lbnbele = new javax.swing.JLabel();
         pnfoto = new javax.swing.JPanel();
         contador = new javax.swing.JSpinner();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtdesc = new javax.swing.JTextArea();
+        btactu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(175, 70));
@@ -152,8 +156,6 @@ public class FrmCompras extends javax.swing.JFrame {
 
         jLabel4.setText("Buscar:");
 
-        jTextField1.setText("jTextField1");
-
         jButton1.setText("Buscar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,8 +177,6 @@ public class FrmCompras extends javax.swing.JFrame {
             }
         });
 
-        lbnbele.setText("elenom");
-
         pnfoto.setBackground(new java.awt.Color(204, 255, 102));
         pnfoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -191,6 +191,10 @@ public class FrmCompras extends javax.swing.JFrame {
             .addGap(0, 134, Short.MAX_VALUE)
         );
 
+        txtdesc.setColumns(20);
+        txtdesc.setRows(5);
+        jScrollPane1.setViewportView(txtdesc);
+
         javax.swing.GroupLayout panelemLayout = new javax.swing.GroupLayout(panelem);
         panelem.setLayout(panelemLayout);
         panelemLayout.setHorizontalGroup(
@@ -198,9 +202,9 @@ public class FrmCompras extends javax.swing.JFrame {
             .addGroup(panelemLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
-                .addComponent(lbnbele)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 425, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btadd)
@@ -209,17 +213,17 @@ public class FrmCompras extends javax.swing.JFrame {
         panelemLayout.setVerticalGroup(
             panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelemLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelemLayout.createSequentialGroup()
-                        .addGap(33, 33, 33)
-                        .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btadd)
-                            .addComponent(lbnbele)
-                            .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panelemLayout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                    .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelemLayout.createSequentialGroup()
+                            .addGap(18, 18, 18)
+                            .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btadd)
+                                .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout panelcontenLayout = new javax.swing.GroupLayout(panelconten);
@@ -241,25 +245,33 @@ public class FrmCompras extends javax.swing.JFrame {
 
         scrol.setViewportView(panelconten);
 
+        btactu.setText("Actualizar");
+        btactu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btactuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(scrol, javax.swing.GroupLayout.PREFERRED_SIZE, 921, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton1)
-                        .addGap(41, 41, 41)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(41, 41, 41)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(btactu)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(scrol)
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,9 +279,10 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btactu))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(scrol, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE))
         );
@@ -284,9 +297,11 @@ public class FrmCompras extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8))
-                .addContainerGap(22, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(0, 915, Short.MAX_VALUE))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,9 +323,59 @@ public class FrmCompras extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    
-      
+
+     if(!txtbuscar.getText().equals("")){
+      borrarPaneles();
+       buscar(txtbuscar.getText());
+     }else{
+         try {
+             throw new Exceptions("Ingrese algun Nombre");
+         } catch (Exceptions ex) {
+             Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null, ex.getMessage());
+         }
+    }
+
+       
     }//GEN-LAST:event_jButton1ActionPerformed
+public void borrarPaneles(){
+    for (Component componente :  panelconten.getComponents()) {
+    if (componente instanceof JPanel ){
+         panelconten.remove(componente);
+        panelconten.revalidate(); // Actualiza el contenedor
+        panelconten.repaint();
+        panelconten.updateUI();
+    
+    }
+}
+}
+    
+public void buscar(String producto){
+    try{
+    panelconten.remove(pan1);
+        panelconten.revalidate(); // Actualiza el contenedor
+        panelconten.repaint(); // Repinta el contenedor
+    
+   
+  ct = new  Admcatalog();
+
+ //AdmInventario vt = new AdmInventario();
+ //vt.img();
+ // vt.imageninv();
+     //SE CREAN VARIOS COMPONENTES SEGUN LA CANTIDAD DE OBJETOS EN LA BASE DE DATOS
+    
+       
+        for(Catalogo dt:ct.Buscar(producto)){
+          componentes(dt); 
+           pan1.setPreferredSize(new Dimension(450, 5));
+        }
+        }catch(Exceptions ex){
+     JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
+}
+
+
+
 //LISTENER DEL BOTON AGREGAR RECIBE COMO PARAMETRO UN OBJETO TIPO CATALOGO 
     //DONDE SE ENCUENTRA EL ID DEL MISMO
     class CatalogoActionListener implements ActionListener {
@@ -363,14 +428,12 @@ public class FrmCompras extends javax.swing.JFrame {
     
     
     
-    
-    
     public void mostrarCatalogo() {
         panelconten.setLayout(new GridLayout(0,2,10,10));
        
         panelconten.remove(panelem);
  
-     JPanel pan1 ,panft;
+     
   ct = new  Admcatalog();
 
  //AdmInventario vt = new AdmInventario();
@@ -378,10 +441,17 @@ public class FrmCompras extends javax.swing.JFrame {
  // vt.imageninv();
      //SE CREAN VARIOS COMPONENTES SEGUN LA CANTIDAD DE OBJETOS EN LA BASE DE DATOS
         for(Catalogo dt:ct.Catalogos()){
-         pan1= new JPanel();
+         componentes(dt);
+             
+        }  
+    }
+    
+     public void componentes(Catalogo dt){
+                pan1= new JPanel();
          panft = new JPanel();
-         lbnbele=new JLabel("xxxxxxxxx");
+         //lbnbele=new JLabel("xxxxxxxxx");
          JLabel lbft = new JLabel();
+          txtdesc = new JTextArea();
           btadd=new JButton("Agregar");
           contador=new JSpinner();
           modelo =  new SpinnerNumberModel(1,  1,   100, 1);
@@ -390,12 +460,12 @@ public class FrmCompras extends javax.swing.JFrame {
              btadd.addActionListener(new CatalogoActionListener(dt));//ENVIA EL OBJETO CATALOGO
              modelo.addChangeListener(new ContadorListener(contador));
               panft.setPreferredSize(new Dimension(100, 100));
-             
+             txtdesc.setPreferredSize(new Dimension(400, 80));
+              pan1.setPreferredSize(new Dimension(700, 120));
                pan1.setBackground(new Color(107, 106, 104));
                pnfoto.setBackground(pnfoto.getBackground());
-               lbnbele.setText(dt.getDatos());
-               
-               
+               txtdesc.setText(dt.getDatos());
+              
     BufferedImage imagen = dt.img();
 
     if (imagen != null) {
@@ -408,16 +478,15 @@ public class FrmCompras extends javax.swing.JFrame {
     //AGREGAR Y LOS OBJETOS AL PANEL Y ACTUALIZA EL MISMO
 panft.add(lbft);
     pan1.add( panft);
-     pan1.add(lbnbele);
+     pan1.add( txtdesc);
      pan1.add(contador);
  pan1.add(btadd);       
    panelconten.add(pan1);
   panelconten.updateUI();
-             
-        }  
-    }
-    
-            
+             System.out.println(panelconten.getSize()+" "+pan1.getWidth());
+                   
+                
+            }
         
  
     
@@ -436,6 +505,11 @@ panft.add(lbft);
         crp.setVisible(true);
         
     }//GEN-LAST:event_btcarritoActionPerformed
+
+    private void btactuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btactuActionPerformed
+borrarPaneles();
+        mostrarCatalogo();
+    }//GEN-LAST:event_btactuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -474,6 +548,7 @@ panft.add(lbft);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btactu;
     private javax.swing.JButton btadd;
     private javax.swing.JButton btcarrito;
     private javax.swing.JSpinner contador;
@@ -489,12 +564,13 @@ panft.add(lbft);
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JLabel lbnbele;
     private javax.swing.JPanel panelconten;
     private javax.swing.JPanel panelem;
     private javax.swing.JPanel pnfoto;
     private javax.swing.JScrollPane scrol;
+    private javax.swing.JTextField txtbuscar;
+    private javax.swing.JTextArea txtdesc;
     // End of variables declaration//GEN-END:variables
 }

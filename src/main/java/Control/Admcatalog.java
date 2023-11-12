@@ -41,14 +41,8 @@ public class Admcatalog {
                 String dato1=rs.getString("NombreProducto");
                 String dato2=rs.getString("Descripcion");
                 float dato3=rs.getFloat("PrecioUnitario");
-                datos=dato1+dato2+dato3;
-                
-           // datos=rs.getString("NombreProducto");
-                    /*+rs.getString("Descripcion")+
-                    rs.getString("PrecioUnitario"); */
-             
-                //ct.img(rs.getString("Imagen")); 
-              
+                datos="Nombre: "+dato1+"\nDescripcion: "+dato2+"\nPrecio: $"+dato3;
+          
                byte[] imagenBytes=rs.getBytes("Imagen");
                BufferedImage imagen = null;
         if (imagenBytes!= null) {
@@ -65,8 +59,6 @@ public class Admcatalog {
               
             }
         
-        ///System.out.println(ctg.getDatos()+datos);
-        
         
         }
             catch(SQLException e){
@@ -78,44 +70,57 @@ public class Admcatalog {
          return catalogo;
      }
      
-     public void Buscar(String busqueda){
-         String sql = "SELECT CATALOGO_PRODUCTO.*, INVENTARIO.NombreProducto " +
-                     "FROM CATALOGO_PRODUCTO " +
-                     "INNER JOIN INVENTARIO ON CATALOGO_PRODUCTO.Producto = INVENTARIO.ID_Invent " +
-                     "WHERE INVENTARIO.NombreProducto LIKE ?";
+     public List<Catalogo>Buscar(String busqueda) throws Exceptions{
+          String datos="";
+         byte[] imagenBytes=null; 
+         String sql = "SELECT  CATALOGO_PRODUCTO.ID_cata, INVENTARIO.PrecioUnitario,INVENTARIO.Imagen,INVENTARIO.NombreProducto,"
+                 + "Detalles_Productos.Descripcion, Detalles_Productos.Marca " +
+"FROM CATALOGO_PRODUCTO " +
+"INNER JOIN INVENTARIO ON CATALOGO_PRODUCTO.Producto = INVENTARIO.ID_Invent " +
+"INNER JOIN Detalles_Productos ON CATALOGO_PRODUCTO.Detalle_Producto = Detalles_Productos.ID_DetallesPRD " +
+"WHERE INVENTARIO.NombreProducto LIKE ? ";
 
         try (Connection conn = ConexionBD.conectar();
                 PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, "%" + busqueda + "%"); // El % se usa para buscar coincidencias parciales
 
-            ResultSet resultSet = statement.executeQuery();
-
-            while (resultSet.next()) {
-                // Recupera los datos de las columnas
-                int idCata = resultSet.getInt("ID_cata");
-                int productoId = resultSet.getInt("Producto");
-                int detalleProductoId = resultSet.getInt("Detalle_Producto");
-                String disponible = resultSet.getString("Disponible");
-                String nombreProducto = resultSet.getString("NombreProducto");
-             
-                System.out.println("ID_Cata: " + idCata);
-                System.out.println("Producto ID: " + productoId);
-                System.out.println("Detalle Producto ID: " + detalleProductoId);
-                System.out.println("Disponible: " + disponible);
-                System.out.println("Nombre Producto: " + nombreProducto);
-                // Resto de las columnas
+            ResultSet rs = statement.executeQuery();
+            if(!rs.next()){
+             throw new Exceptions(" Producto no encontrado.");
+            }else{
+                rs = statement.executeQuery();
+           while(rs.next()){
+                  Catalogo ctg = new Catalogo();
+               int id=rs.getInt("ID_cata");
+               System.out.println(id+" ::");
+                String dato1=rs.getString("NombreProducto");
+                String dato2=rs.getString("Descripcion");
+                float dato3=rs.getFloat("PrecioUnitario");
+                  imagenBytes=rs.getBytes("Imagen");
+               datos="Nombre: "+dato1+"\nDescripcion: "+dato2+"\nPrecio: $"+dato3;
+          
+               BufferedImage imagen = null;
+        if (imagenBytes!= null) {
+            try {
+                ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
+                imagen = ImageIO.read(bis);
+            } catch (IOException e) {
+                e.printStackTrace();
+               throw new Exceptions("No se encuentra imagen");
             }
+        }
+                
+                catalogo.add(new Catalogo(id,datos, imagen));
+                        
+            }
+            }
+           
+           
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return catalogo;
      }
-     
-     
-     
-     
-     
-     
-     
      
     
 }
