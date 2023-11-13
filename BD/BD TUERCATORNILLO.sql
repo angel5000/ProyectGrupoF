@@ -72,20 +72,21 @@ add Imagen varbinary(max) */
 select*from INVENTARIO
 INSERT INTO INVENTARIO ( NombreProducto,Stock ,Fecha_Ingreso,PrecioUnitario)
 VALUES
-    ( 'Perno',10,'10/10/20',10.2),
-    ('Perno',20,'10/10/23', 5),
-    ('Tuerca',50,'10/10/22',0.5),
-    ('Tuerca',100,'10/10/21',0.7);
+    ( 'Perno Hexagonal 1/4',10,'10/10/20',10.2),
+    ('Perno Galvanizado 1/4',20,'10/10/23', 5),
+    ('Tuerca Hexagona 1/4',50,'10/10/22',0.5),
+    ('Tuerca hexagonal galvanizado 3/8',100,'10/10/21',0.7);
 
-	('Tuercas',10,'10/10/20',4.2),
-    ('Tuercas',20,'10/10/23', 2.5),
-    ('Tornillos',50,'10/10/22',1.5),
-    ('Herramientas',100,'10/10/21',20.30),
-	('Herramientas',100,'10/10/21',15.50);
+	('Tuerca de acero inoxidable M8',10,'10/10/20',4.2),
+    ('Perno de acero galvanizado M10',20,'10/10/23', 2.5),
+    ('Tornillo de cabeza hexagonal M6',50,'10/10/22',1.5),
+    ('Llave inglesa 8 pulgadas',100,'10/10/21',20.30),
+	('Llave M10',100,'10/10/21',15.50);
+	select*from Detalles_Productos
+	update INVENTARIO set NombreProducto ='Llave M10' where ID_Invent =9
+
+
 	
-	UPDATE  INVENTARIO
-SET Imagen = (SELECT * FROM OPENROWSET(BULK N'C:\Users\angeldvvp\Desktop\Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta\BD\imagenes\Pernohexagonal.jpg', SINGLE_BLOB) AS Imagen)
-WHERE ID_Invent = 1
 
 	DELETE FROM Inventario ;
 	DELETE FROM Detalles_Productos ;
@@ -119,6 +120,10 @@ VALUES
     (2,'Perno','STANLEY1', 'Perno galvanizado, 1/4" x 1.5"'),
     (3, 'Perno','STANLEY2','Tuerca hexagonal de acero, 1/4"'),
     (4, 'Perno','STANLEY3','Tuerca hexagonal de acero galvanizado, 3/8"');
+	
+
+
+
 	INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
 VALUES (5, 'Tuercas', 'BOSCH', 'Tuerca de acero inoxidable, tamaño M8');
 
@@ -171,18 +176,18 @@ VALUES
 
 sELECT
     C.ID_cata,
-    c.Producto,C.Detalle_Producto,IP.NombreProducto,
+    c.Producto,C.Detalle_Producto,IP.NombreProducto,DP.Marca,
     DP.Descripcion, IP.PrecioUnitario,IP.Imagen
 FROM CATALOGO_PRODUCTO AS C
  JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent
 JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD;
 
-SELECT  INVENTARIO.NombreProducto,Detalles_Productos.Descripcion, Detalles_Productos.Marca
+SELECT  CATALOGO_PRODUCTO.ID_cata,INVENTARIO.PrecioUnitario,INVENTARIO.Imagen, INVENTARIO.NombreProducto,
+Detalles_Productos.Descripcion, Detalles_Productos.Marca
 FROM CATALOGO_PRODUCTO
 INNER JOIN INVENTARIO ON CATALOGO_PRODUCTO.Producto = INVENTARIO.ID_Invent 
 INNER JOIN Detalles_Productos ON CATALOGO_PRODUCTO.Detalle_Producto = Detalles_Productos.ID_DetallesPRD 
-WHERE INVENTARIO.NombreProducto LIKE 'perno';
-
+WHERE INVENTARIO.NombreProducto LIKE '%pern%' ; 
 
 
 

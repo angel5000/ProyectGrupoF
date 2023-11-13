@@ -122,7 +122,36 @@ int idProducto=0;int resultado=0, valor=0;
         
     }
     
-    public int RemoverItem(int idProducto){
+    public List<CarCompras> BuscarItemcarrito(String Buscar)throws Exceptions{
+        
+         boolean encontrado = false;
+         List<CarCompras> valoresEncontrados = new ArrayList<>();
+         String valor="";
+        for (CarCompras item : carrito) {
+            if (item.getNombre().toLowerCase().contains(Buscar.toLowerCase())) {
+                encontrado = true;
+              //  valor=item.getNombre();
+                valoresEncontrados.add(item);
+
+                break;
+            }
+        }
+
+        // Verificar si se encontró el elemento
+        if (!encontrado) {
+            throw new Exceptions("Elemento no encontrado en el carrito."+valor+" : "+Buscar);
+            
+            
+        } else 
+            System.out.println("ENCONTRADO: "+valor);
+        return valoresEncontrados;
+        
+        
+    }
+    
+    
+    
+    public int RemoverItem(int idProducto, CarCompras elem){
          
             String sentenciaSQL = "DELETE FROM Carrito WHERE ID_producto = ?";
             try (Connection conn = ConexionBD.conectar();
@@ -131,6 +160,7 @@ int idProducto=0;int resultado=0, valor=0;
                 int filasAfectadas = statement.executeUpdate();
 
                 if (filasAfectadas > 0) {
+                    carrito.remove(elem);
                    return 1;
                 } 
             

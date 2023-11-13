@@ -25,7 +25,7 @@ public class Admcatalog {
      List<Catalogo> catalogo= new ArrayList<>();
      public List<Catalogo> Catalogos(){
          String datos="";
-           String query = "SELECT C.ID_cata,c.Producto,C.Detalle_Producto ,IP.NombreProducto,DP.Descripcion, IP.PrecioUnitario,IP.Imagen"
+           String query = "SELECT C.ID_cata,c.Producto,C.Detalle_Producto ,IP.NombreProducto,DP.Marca,DP.Descripcion, IP.PrecioUnitario,IP.Imagen"
         + " FROM CATALOGO_PRODUCTO AS C JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent " +
 "JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD";
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
@@ -39,9 +39,11 @@ public class Admcatalog {
               int idpro=rs.getInt("Producto");
               int iddetll=rs.getInt("Detalle_Producto");
                 String dato1=rs.getString("NombreProducto");
-                String dato2=rs.getString("Descripcion");
-                float dato3=rs.getFloat("PrecioUnitario");
-                datos="Nombre: "+dato1+"\nDescripcion: "+dato2+"\nPrecio: $"+dato3;
+                String dato2=rs.getString("Marca");
+                String dato3=rs.getString("Descripcion");
+                
+                float dato4=rs.getFloat("PrecioUnitario");
+                datos="Nombre: "+dato1+"\nMarca:"+dato2+"\nDescripcion: "+dato3+"\nPrecio: $"+dato4;
           
                byte[] imagenBytes=rs.getBytes("Imagen");
                BufferedImage imagen = null;
@@ -94,10 +96,12 @@ public class Admcatalog {
                int id=rs.getInt("ID_cata");
                System.out.println(id+" ::");
                 String dato1=rs.getString("NombreProducto");
-                String dato2=rs.getString("Descripcion");
-                float dato3=rs.getFloat("PrecioUnitario");
+                String dato2=rs.getString("Marca");
+
+                String dato3=rs.getString("Descripcion");
+                float dato4=rs.getFloat("PrecioUnitario");
                   imagenBytes=rs.getBytes("Imagen");
-               datos="Nombre: "+dato1+"\nDescripcion: "+dato2+"\nPrecio: $"+dato3;
+               datos="Nombre: "+dato1+"\nMarca: "+dato2+"\nDescripcion: "+dato3+"\nPrecio: $"+dato4;
           
                BufferedImage imagen = null;
         if (imagenBytes!= null) {

@@ -40,6 +40,8 @@ public class CarritoCompras extends javax.swing.JFrame {
     public CarritoCompras() {
         
             initComponents();
+             Btrevertir.setEnabled(false);
+            adcrp = new AdmCompra();
             FrmCompras fr = new FrmCompras();
             int anchoVentanaPrincipal = fr .getWidth();
             int altoVentanaPrincipal = fr.getHeight();
@@ -78,19 +80,15 @@ public class CarritoCompras extends javax.swing.JFrame {
         pnfoto = new javax.swing.JPanel();
         lbnbele = new javax.swing.JLabel();
         btquitar = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        txtbuscar = new javax.swing.JTextField();
+        btbuscar = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox<>();
+        Btrevertir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                formWindowActivated(evt);
-            }
-        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista de Compras"));
 
@@ -113,11 +111,6 @@ public class CarritoCompras extends javax.swing.JFrame {
         lbnbele.setText("elenom");
 
         btquitar.setText("Quitar");
-        btquitar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btquitarActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout elemtLayout = new javax.swing.GroupLayout(elemt);
         elemt.setLayout(elemtLayout);
@@ -164,16 +157,27 @@ public class CarritoCompras extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(contenedor);
 
-        jTextField1.setText("jTextField1");
+        txtbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtbuscarKeyTyped(evt);
+            }
+        });
 
-        jButton2.setText("Buscar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btbuscar.setText("Buscar");
+        btbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btbuscarActionPerformed(evt);
             }
         });
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden..." }));
+
+        Btrevertir.setText("X");
+        Btrevertir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtrevertirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -186,22 +190,30 @@ public class CarritoCompras extends javax.swing.JFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 668, Short.MAX_VALUE)
                         .addGap(15, 15, 15))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 284, Short.MAX_VALUE)
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(Btrevertir)
+                        .addGap(20, 20, 20)
+                        .addComponent(btbuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 7, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 7, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Btrevertir))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btbuscar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
@@ -259,7 +271,18 @@ public class CarritoCompras extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void borrarPaneles(){
+    for (Component componente :  contenedor.getComponents()) {
+    if (componente instanceof JPanel ){
+         contenedor.remove(componente);
+        contenedor.revalidate(); // Actualiza el contenedor
+        contenedor.repaint();
+        contenedor.updateUI();
     
+    }
+   // pan1=null;
+}
+    }
     class RemItemActionListener implements ActionListener {
     private CarCompras item;
 
@@ -273,9 +296,11 @@ public class CarritoCompras extends javax.swing.JFrame {
         //System.out.println(item.getIdelemnt());
        
             //System.out.println(  catalogo.getIdcata());
-            if(adcrp.RemoverItem(item.getIdelemnt())==1){
+            if(adcrp.RemoverItem(item.getIdelemnt(),item)==1){
                String nombrePanelAEliminar = item.getIdelemnt() + "";
                // adcpr.IngresarItemCarrito(c.getIdcata());
+              
+                
                for (Component componente : contenedor.getComponents()) {
     if (componente instanceof JPanel && nombrePanelAEliminar.equals(componente.getName())) {
         contenedor.remove(componente);
@@ -283,6 +308,7 @@ public class CarritoCompras extends javax.swing.JFrame {
         contenedor.repaint(); // Repinta el contenedor
         break; // Si se encuentra y elimina un panel con el nombre, puedes salir del bucle
     }
+  
 }
                
                
@@ -295,19 +321,9 @@ public class CarritoCompras extends javax.swing.JFrame {
     }
 }
     
-    
-    
-    public void mostrarlista() throws Exceptions, SQLException{
-   
-     adcrp = new AdmCompra();
-        contenedor.setLayout(new GridLayout(0,1,10,10));
-      //  elemt.setLayout(null);
-         contenedor.remove(elemt);
-     int id=0;
- 
-       
-        for(CarCompras dt:adcrp.Carrito()){
-         pan1= new JPanel();
+    public void componentes(CarCompras dt){
+           int id=0;
+          pan1= new JPanel();
          panft = new JPanel();
  
               lbnbele=new JLabel("xxxxxxxxx");
@@ -318,12 +334,10 @@ public class CarritoCompras extends javax.swing.JFrame {
           pan1.setName(id+"");
              btquitar.addActionListener(new RemItemActionListener(dt));
 panft.setPreferredSize(new Dimension(100, 100));
-             
-             
-               pan1.setBackground(new Color(107, 106, 104));
-               //pnfoto.setBackground(pnfoto.getBackground());
-               lbnbele.setText("Nombre: \n "
-                       + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());
+            
+     pan1.setBackground(new Color(107, 106, 104));
+     lbnbele.setText("Nombre: \n "
+      + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());
                
                
     BufferedImage imagen = dt.img();
@@ -347,25 +361,58 @@ panft.add(lbft);
    
   contenedor.add(pan1);
     
-         contenedor.updateUI();
-             
+  contenedor.updateUI();
+       
+    }
+    
+    public void mostrarlista() throws Exceptions, SQLException{
+   
+        contenedor.setLayout(new GridLayout(0,1,10,10));
+         contenedor.remove(elemt);
+  
+        for(CarCompras dt:adcrp.Carrito()){
+             componentes(dt);
         } 
     
 }
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    
+    
+    
+    
+    
+    public void mostrarbusqueda(){
+       // adcrp = new AdmCompra();
+       borrarPaneles();
+        contenedor.setLayout(new GridLayout(0,1,10,10));
+        // contenedor.remove(elemt);
+  try {
+     // adcrp.BuscarItemcarrito(txtbuscar.getText());
+        for(CarCompras dt:adcrp.BuscarItemcarrito(txtbuscar.getText())){
+             componentes(dt);
+        } 
         
-           
+        } catch (Exceptions ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }
         
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-   
+    }
+    
+    
+    private void btbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbuscarActionPerformed
         
-      
+   if(!txtbuscar.getText().equals("")){
+     mostrarbusqueda();
+     }else{
+         try {
+             throw new Exceptions("Ingrese algun Nombre");
+         } catch (Exceptions ex) {
+             Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
+             JOptionPane.showMessageDialog(null, ex.getMessage());
+         }
+    }
         
-        
-        
-    }//GEN-LAST:event_formWindowActivated
+    }//GEN-LAST:event_btbuscarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -373,13 +420,33 @@ panft.add(lbft);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btquitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btquitarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btquitarActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void BtrevertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtrevertirActionPerformed
+    
+        try {
+            adcrp = new AdmCompra();
+              borrarPaneles();
+            mostrarlista();
+        } catch (Exceptions ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_BtrevertirActionPerformed
+
+    private void txtbuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyTyped
+       String datos=txtbuscar.getText();
+        if(!datos.equals("")){
+        Btrevertir.setEnabled(true);
+      }else{
+          Btrevertir.setEnabled(false);
+      }
+    }//GEN-LAST:event_txtbuscarKeyTyped
 
     /**
      * @param args the command line arguments
@@ -417,18 +484,19 @@ panft.add(lbft);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Btrevertir;
+    private javax.swing.JButton btbuscar;
     private javax.swing.JButton btquitar;
     private javax.swing.JPanel contenedor;
     private javax.swing.JPanel elemt;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lbnbele;
     private javax.swing.JPanel pnfoto;
+    private javax.swing.JTextField txtbuscar;
     // End of variables declaration//GEN-END:variables
 }

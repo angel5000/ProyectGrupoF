@@ -42,7 +42,7 @@ public class FrmCompras extends javax.swing.JFrame {
     public FrmCompras() {
         initComponents();
          mostrarCatalogo();
-       
+       btactu.setEnabled(false);
     }
 
     /**
@@ -156,6 +156,12 @@ public class FrmCompras extends javax.swing.JFrame {
 
         jLabel4.setText("Buscar:");
 
+        txtbuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtbuscarKeyTyped(evt);
+            }
+        });
+
         jButton1.setText("Buscar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,11 +177,6 @@ public class FrmCompras extends javax.swing.JFrame {
         panelem.setBackground(new java.awt.Color(204, 255, 204));
 
         btadd.setText("Agregar");
-        btadd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btaddActionPerformed(evt);
-            }
-        });
 
         pnfoto.setBackground(new java.awt.Color(204, 255, 102));
         pnfoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -215,13 +216,12 @@ public class FrmCompras extends javax.swing.JFrame {
             .addGroup(panelemLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelemLayout.createSequentialGroup()
-                            .addGap(18, 18, 18)
-                            .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btadd)
-                                .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelemLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btadd)
+                            .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(42, Short.MAX_VALUE))
         );
@@ -245,7 +245,7 @@ public class FrmCompras extends javax.swing.JFrame {
 
         scrol.setViewportView(panelconten);
 
-        btactu.setText("Actualizar");
+        btactu.setText("X");
         btactu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btactuActionPerformed(evt);
@@ -261,16 +261,16 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(41, 41, 41)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(7, 7, 7)
                 .addComponent(btactu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addComponent(scrol)
+                .addComponent(scrol, javax.swing.GroupLayout.DEFAULT_SIZE, 973, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -491,15 +491,6 @@ panft.add(lbft);
  
     
     
-    private void btaddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btaddActionPerformed
-        
-        
-        
-        
-        
-        
-    }//GEN-LAST:event_btaddActionPerformed
-
     private void btcarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcarritoActionPerformed
        CarritoCompras crp = new CarritoCompras();
         crp.setVisible(true);
@@ -510,6 +501,18 @@ panft.add(lbft);
 borrarPaneles();
         mostrarCatalogo();
     }//GEN-LAST:event_btactuActionPerformed
+
+    private void txtbuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyTyped
+      String datos=txtbuscar.getText();
+        if(!datos.equals("")){
+          btactu.setEnabled(true);
+      }else{
+          btactu.setEnabled(false);
+      }
+        
+        
+        
+    }//GEN-LAST:event_txtbuscarKeyTyped
 
     /**
      * @param args the command line arguments
