@@ -367,7 +367,8 @@ public void buscar(String producto){
        
         for(Catalogo dt:ct.Buscar(producto)){
           componentes(dt); 
-           pan1.setPreferredSize(new Dimension(450, 5));
+           //pan1.setPreferredSize(new Dimension(450, 5));
+           // txtdesc.setPreferredSize(new Dimension(400, 80));
         }
         }catch(Exceptions ex){
      JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -388,15 +389,21 @@ public void buscar(String producto){
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            try {
-                //System.out.println(  catalogo.getIdcata());
-                if(adcpr.VerificarItems(catalogo.getIdcata())!=1){
-                    System.out.println(adcpr.VerificarItems(catalogo.getIdcata())+" :valor1");
-                    adcpr.IngresarItemCarrito(catalogo.getIdcata(),cantidad);
-                    JOptionPane.showMessageDialog(null, "Ingresado en el carrito");
-                } else{
+            // try {
+            //try {
+            // System.out.println(  catalogo.getIdcata());
+            //  if(adcpr.VerificarItems(catalogo.getIdcata())!=1){
+            // System.out.println(adcpr.VerificarItems(catalogo.getIdcata())+" :valor1");
+            adcpr.IngresarItemCarrito(catalogo.getIdcata(),cantidad);
+        } catch (Exceptions ex) {
+            Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                   JOptionPane.showMessageDialog(null, "Ingresado en el carrito");
+               /* } else{
                      System.out.println(adcpr.VerificarItems(catalogo.getIdcata())+" :valor2");
-                    JOptionPane.showMessageDialog(null, "Ya esta ingresado en el carrito");
+                   // JOptionPane.showMessageDialog(null, "Ya esta ingresado en el carrito");
                 }
             } catch (Exceptions ex) {
                 Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
@@ -407,6 +414,7 @@ public void buscar(String producto){
             Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
              // JOptionPane.showMessageDialog(null, ex.getMessage());
         }
+    }*/
     }
 }
 //LISTENER DEL JSPINNER RECIVE COMO PARAMETRO UN JSPINNER  
@@ -456,16 +464,17 @@ public void buscar(String producto){
           contador=new JSpinner();
           modelo =  new SpinnerNumberModel(1,  1,   100, 1);
      contador.setModel(modelo);
-             btadd.setName(dt.getIdcata()+"");//SE LE ASIGNA UN TAG O NOMBRE AL BOTON PARA IDENTIFCAR EL ELEMENTO DEL CATALOGO
-             btadd.addActionListener(new CatalogoActionListener(dt));//ENVIA EL OBJETO CATALOGO
-             modelo.addChangeListener(new ContadorListener(contador));
-              panft.setPreferredSize(new Dimension(100, 100));
-             txtdesc.setPreferredSize(new Dimension(400, 80));
-              pan1.setPreferredSize(new Dimension(700, 120));
-               pan1.setBackground(new Color(107, 106, 104));
-               pnfoto.setBackground(pnfoto.getBackground());
-               txtdesc.setText(dt.getDatos());
-              
+        btadd.setName(dt.getIdcata()+"");//SE LE ASIGNA UN TAG O NOMBRE AL BOTON PARA IDENTIFCAR EL ELEMENTO DEL CATALOGO
+        btadd.addActionListener(new CatalogoActionListener(dt));//ENVIA EL OBJETO CATALOGO
+      modelo.addChangeListener(new ContadorListener(contador));
+      panft.setPreferredSize(new Dimension(100, 100));
+       txtdesc.setPreferredSize(new Dimension(400, 80));
+        pan1.setPreferredSize(new Dimension(700, 120));
+      pan1.setBackground(new Color(107, 106, 104));
+         pnfoto.setBackground(pnfoto.getBackground());
+  txtdesc.setText("Nombre: "+dt.getNombre()+"\nMarca:"+dt.getMarca()+"\nDescripcion: "+dt.getDetalles()+
+                        "\nPrecio: $"+dt.getPrecio());
+              System.out.println("xxx: "+dt.getNombre());
     BufferedImage imagen = dt.img();
 
     if (imagen != null) {
@@ -483,7 +492,7 @@ panft.add(lbft);
  pan1.add(btadd);       
    panelconten.add(pan1);
   panelconten.updateUI();
-             System.out.println(panelconten.getSize()+" "+pan1.getWidth());
+ //  System.out.println(panelconten.getSize()+" "+pan1.getWidth());
                    
                 
             }
@@ -500,6 +509,8 @@ panft.add(lbft);
     private void btactuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btactuActionPerformed
 borrarPaneles();
         mostrarCatalogo();
+        btactu.setEnabled(false);
+        txtbuscar.setText("");
     }//GEN-LAST:event_btactuActionPerformed
 
     private void txtbuscarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyTyped

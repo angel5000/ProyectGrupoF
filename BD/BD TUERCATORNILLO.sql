@@ -141,6 +141,7 @@ VALUES (8, 'Herramientas', 'DOLMAR', 'Llave inglesa ajustable de 8 pulgadas');
 INSERT INTO Detalles_Productos (ProductoID, Categoria, Marca, Descripcion)
 VALUES (9, 'Herramientas', 'DOLMAR', 'Llave M10');
 
+select*from CATALOGO_PRODUCTO
 CREATE TABLE CATALOGO_PRODUCTO(
 ID_cata INT PRIMARY KEY IDENTITY(001,1),
 Producto INT,
@@ -149,7 +150,7 @@ Disponible char(1),
 CONSTRAINT fk_invent FOREIGN KEY (Producto ) REFERENCES INVENTARIO(ID_Invent),
 CONSTRAINT fk_Detallprd FOREIGN KEY (Detalle_Producto ) REFERENCES Detalles_Productos(ID_DetallesPRD)
 );
-
+delete from CATALOGO_PRODUCTO where Producto =1;
 INSERT INTO CATALOGO_PRODUCTO ( Producto,Detalle_Producto  )
 VALUES
     ( 1, 5);
@@ -219,7 +220,7 @@ VALUES
     ( 100, 1,5);
 
 
-	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen, ID_producto From Carrito AS C 
+	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen, ID_producto, c.ID_carrito,c.cantidad From Carrito AS C 
                  JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent 
                  JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD;
 

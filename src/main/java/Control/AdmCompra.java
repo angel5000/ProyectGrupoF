@@ -22,24 +22,27 @@ import model.ConexionBD;
  * @author angeldvvp
  */
 public class AdmCompra {
-    List<CarCompras> carrito = new ArrayList<>();
+   public  List<CarCompras> carrito = new ArrayList<>();
 int idProducto=0;int resultado=0, valor=0;
-    public List<CarCompras> Carrito()throws Exceptions, SQLException{
+    public void Carrito()throws Exceptions, SQLException{
         //CONSULTA HACIA LA BASE DE DATOS ENTRE LAS TABLAS CLIENTE INVENTARIO Y CARRITO
-         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, cantidad FROM Carrito AS C "
+         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad FROM Carrito AS C "
                  + "JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent "
                  + "JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD";
         
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            
+           ) {
+              ResultSet rs = stmt.executeQuery();
+            if(!rs.next()){
+                throw new  Exceptions("Su carrito esta vacio");
+            }else{
+                rs = stmt.executeQuery();
             while (rs.next()) {//RECORRIDO DE DATOS
               CarCompras crp= new CarCompras();
-             
+             crp.setIdCarrito(rs.getInt("ID_carrito"));
              crp.setIdUsua(rs.getInt("ID_cliente")); 
              crp.setIdelemnt(rs.getInt("ID_producto")); 
-              crp.setIdUsua(rs.getInt("ID_cliente")); 
                crp.setNombre(rs.getString("NombreProducto")); 
                 crp.setDetalles(rs.getString("Descripcion")); 
               crp.setCantidad(rs.getInt("cantidad"));
@@ -58,18 +61,16 @@ int idProducto=0;int resultado=0, valor=0;
         }crp.setBufferedImage(imagen);
                 carrito.add( crp);
             }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-              JOptionPane.showMessageDialog(null,  e.getStackTrace()+"");
-        }/*
-        catch (Exceptions e) {
-  e.printStackTrace();
-             JOptionPane.showMessageDialog(null,  e.getMessage()+"");
-}*/
+              JOptionPane.showMessageDialog(null,  e.getMessage());
+        }
+   
         
         
         
-        return carrito;
+      //  return carrito;
         
         
     }
@@ -102,21 +103,18 @@ int idProducto=0;int resultado=0, valor=0;
                         if (filasAfectadas > 0) {
                             System.out.println("Datos agregados a la tabla Carrito.");
                         } else {
-                             ExcepcionVerificar();
-                            System.out.println("No se pudieron agregar los datos a la tabla Carrito.");
+                     
+                            throw new Exceptions( "No se pudieron agregar los datos a la tabla Carrito.");
                         }
                     }
                 } else {
-                    System.out.println("No se encontró el ID_cata en la tabla CATALOGO_PRODUCTO.");
+                    throw new Exceptions("No se encontró el ID_cata en la tabla CATALOGO_PRODUCTO.");
                 }
 
                 
                  } catch (SQLException e) {
             e.printStackTrace();
-        }catch (Exceptions e) {
-  e.printStackTrace();
-           
-}
+        }
 
         
         
@@ -130,11 +128,12 @@ int idProducto=0;int resultado=0, valor=0;
         for (CarCompras item : carrito) {
             if (item.getNombre().toLowerCase().contains(Buscar.toLowerCase())) {
                 encontrado = true;
-              //  valor=item.getNombre();
+               
                 valoresEncontrados.add(item);
-
+                valor=item.getNombre();
                 break;
             }
+             
         }
 
         // Verificar si se encontró el elemento
@@ -151,18 +150,23 @@ int idProducto=0;int resultado=0, valor=0;
     
     
     
-    public int RemoverItem(int idProducto, CarCompras elem){
-         
-            String sentenciaSQL = "DELETE FROM Carrito WHERE ID_producto = ?";
+    public int RemoverItem(int idCarrito, CarCompras elem) throws Exceptions{
+         int elemento=0;
+            String sentenciaSQL = "DELETE FROM Carrito WHERE ID_carrito = ?";
             try (Connection conn = ConexionBD.conectar();
                     PreparedStatement statement = conn.prepareStatement(sentenciaSQL)) {
-                statement.setInt(1, idProducto);
+                statement.setInt(1, idCarrito);
                 int filasAfectadas = statement.executeUpdate();
 
                 if (filasAfectadas > 0) {
+                    elemento=elem.getIdCarrito();
                     carrito.remove(elem);
+                     System.out.println("Item removido del carrito id:" +elemento);
                    return 1;
-                } 
+                } else{
+                    throw new Exceptions("Hubo un problema al tratar de quitar el objeto de la lista");
+            
+                }
             
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,7 +176,7 @@ int idProducto=0;int resultado=0, valor=0;
     
     
     //METODO QUE VERIFICA SI YA EXITES UN PRODUCTO EN EL CARRITO
-    public int VerificarItems(int IDCatalogo) throws Exceptions, SQLException{
+  /*  public int VerificarItems(int IDCatalogo) throws Exceptions, SQLException{
        
      
 String consultaCatalogo = "SELECT Producto, Detalle_Producto FROM CATALOGO_PRODUCTO WHERE ID_cata = ?";
@@ -202,13 +206,14 @@ try (Connection conn = ConexionBD.conectar()) {
                 // ExcepcionVerificar();
                 resultado = resultSetCarrito.getInt(1);
                 if (resultado == 1) {
-                  
-                    return resultado;
+                   throw new Exceptions("Ya esta ingresado");
+                   
                 } if (resultado == 0){
                    
-                    return resultado;
+                return resultado;
+            
                 }
-                ExcepcionVerificar();}
+            }
             
          
         } catch (SQLException e) {
@@ -219,24 +224,13 @@ try (Connection conn = ConexionBD.conectar()) {
 } catch (SQLException e) {
     e.printStackTrace();
  
-}  catch (Exceptions e) {
-  e.printStackTrace();
-           
-}
+}  
         
         return resultado;
         
     }
+    */
     
-     public static void ExcepcionVerificar() throws Exceptions,SQLException {
-        // Lanzamos la excepción personalizada
-      //  throw new SQLException("Error de SQL");
-        throw new Exceptions("Error al identificar los ID de Producto o el ID del cliente" );
-    }
-     public static void ExcepcionIngresoCRP() throws Exceptions,SQLException {
-        // Lanzamos la excepción personalizada
-        throw new Exceptions("Verifique que el nombre de las tablas o columnas esten correctas ");
-    }
     
     
     

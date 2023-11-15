@@ -24,7 +24,7 @@ public class Admcatalog {
    
      List<Catalogo> catalogo= new ArrayList<>();
      public List<Catalogo> Catalogos(){
-         String datos="";
+      
            String query = "SELECT C.ID_cata,c.Producto,C.Detalle_Producto ,IP.NombreProducto,DP.Marca,DP.Descripcion, IP.PrecioUnitario,IP.Imagen"
         + " FROM CATALOGO_PRODUCTO AS C JOIN INVENTARIO IP ON C.Producto = IP.ID_Invent " +
 "JOIN Detalles_Productos DP ON C.Detalle_Producto = DP.ID_DetallesPRD";
@@ -35,28 +35,29 @@ public class Admcatalog {
             while (rs.next()) {//RECORRIDO DE DATOS
                  Catalogo ctg = new Catalogo();
                 
-              int id=rs.getInt("ID_cata");
-              int idpro=rs.getInt("Producto");
-              int iddetll=rs.getInt("Detalle_Producto");
-                String dato1=rs.getString("NombreProducto");
-                String dato2=rs.getString("Marca");
-                String dato3=rs.getString("Descripcion");
+              ctg.setIdcata(rs.getInt("ID_cata"));
+              ctg.setIdprod(rs.getInt("Producto"));
+              ctg.setIddetall(rs.getInt("Detalle_Producto"));
+                ctg.setNombre(rs.getString("NombreProducto"));
+                ctg.setMarca( rs.getString("Marca"));
+                ctg.setDetalles(rs.getString("Descripcion"));
                 
-                float dato4=rs.getFloat("PrecioUnitario");
-                datos="Nombre: "+dato1+"\nMarca:"+dato2+"\nDescripcion: "+dato3+"\nPrecio: $"+dato4;
-          
+              ctg.setPrecio(rs.getFloat("PrecioUnitario"));
+              
+            
                byte[] imagenBytes=rs.getBytes("Imagen");
                BufferedImage imagen = null;
         if (imagenBytes!= null) {
             try {
                 ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
                 imagen = ImageIO.read(bis);
+                ctg.setimg(imagen);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-                //catalogo.add( new Catalogo(datos,imagen));
-                catalogo.add(new Catalogo(id,idpro,iddetll,datos, imagen));
+             
+                catalogo.add(ctg);
            
               
             }
@@ -64,10 +65,9 @@ public class Admcatalog {
         
         }
             catch(SQLException e){
-                e.printStackTrace();
-                  //  System.out.println(e.getErrorCode());
+               e.printStackTrace();
+
                     }
-         
          
          return catalogo;
      }
@@ -93,28 +93,28 @@ public class Admcatalog {
                 rs = statement.executeQuery();
            while(rs.next()){
                   Catalogo ctg = new Catalogo();
-               int id=rs.getInt("ID_cata");
-               System.out.println(id+" ::");
-                String dato1=rs.getString("NombreProducto");
-                String dato2=rs.getString("Marca");
-
-                String dato3=rs.getString("Descripcion");
-                float dato4=rs.getFloat("PrecioUnitario");
-                  imagenBytes=rs.getBytes("Imagen");
-               datos="Nombre: "+dato1+"\nMarca: "+dato2+"\nDescripcion: "+dato3+"\nPrecio: $"+dato4;
-          
+               ctg.setIdcata(rs.getInt("ID_cata"));
+                ctg.setNombre(rs.getString("NombreProducto"));
+                ctg.setMarca( rs.getString("Marca"));
+                ctg.setDetalles(rs.getString("Descripcion"));
+                
+              ctg.setPrecio(rs.getFloat("PrecioUnitario"));
+                imagenBytes=rs.getBytes("Imagen");
+              
+              System.out.println("Producto Encontrado:" +ctg.getNombre());
                BufferedImage imagen = null;
         if (imagenBytes!= null) {
             try {
                 ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
                 imagen = ImageIO.read(bis);
+                  ctg.setimg(imagen);
             } catch (IOException e) {
                 e.printStackTrace();
                throw new Exceptions("No se encuentra imagen");
             }
         }
                 
-                catalogo.add(new Catalogo(id,datos, imagen));
+                catalogo.add(ctg);
                         
             }
             }

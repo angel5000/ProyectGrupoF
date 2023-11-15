@@ -15,9 +15,9 @@ public class Compra extends CarCompras {
    }
    Date FechaCompra;
     //CONSTRUCTOR 
-   public Compra(int idUsua,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio, Date FechaCompra){
+   public Compra(int idUsua,int idCarrito,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio, Date FechaCompra){
       
-       super(idUsua,  idelemnt,Imagen, Nombre, cantidad, tipo, Marca, Detalles, precio);
+       super(idUsua, idCarrito, idelemnt,Imagen, Nombre, cantidad, tipo, Marca, Detalles, precio);
       this.FechaCompra=FechaCompra;
          
    }

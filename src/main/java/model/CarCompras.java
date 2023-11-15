@@ -15,13 +15,13 @@ public class CarCompras {
     byte Imagen; private String Nombre=""; private int cantidad; 
     private String tipo; private String Marca; private String Detalles; private float precio;
     int idUsua=0,idelemnt=0;
-    BufferedImage imagen;
+    BufferedImage imagen;int idCarrito=0;
     public CarCompras(){
         
     }
-     public CarCompras(int idUsua,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
+     public CarCompras(int idUsua,int idCarrito,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
       this.idelemnt=idelemnt;
-       
+       this.idCarrito= idCarrito;
        this.idUsua=idUsua;
        this.Imagen=Imagen;
        this.Nombre=Nombre;
@@ -34,6 +34,15 @@ public class CarCompras {
    }
 ///METODOS SET Y GETS
 
+    public int getIdCarrito() {
+        return idCarrito;
+    }
+
+    public void setIdCarrito(int idCarrito) {
+        this.idCarrito = idCarrito;
+    }
+
+     
     public int getIdelemnt() {
         return idelemnt;
     }
@@ -110,6 +119,11 @@ public class CarCompras {
 
     public void setPrecio(float precio) {
         this.precio = precio;
+    }
+
+    @Override
+    public String toString() {
+        return "CarCompras{" + "Imagen=" + Imagen + ", Nombre=" + Nombre + ", cantidad=" + cantidad + ", tipo=" + tipo + ", Marca=" + Marca + ", Detalles=" + Detalles + ", precio=" + precio + ", idUsua=" + idUsua + ", idelemnt=" + idelemnt + ", imagen=" + imagen + '}';
     }
 
     

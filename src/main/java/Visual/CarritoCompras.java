@@ -43,6 +43,7 @@ public class CarritoCompras extends javax.swing.JFrame {
              Btrevertir.setEnabled(false);
             adcrp = new AdmCompra();
             FrmCompras fr = new FrmCompras();
+            //CENTRAR VENTANA/////
             int anchoVentanaPrincipal = fr .getWidth();
             int altoVentanaPrincipal = fr.getHeight();
             
@@ -52,8 +53,9 @@ public class CarritoCompras extends javax.swing.JFrame {
             
             // Establece las coordenadas de la ventana secundaria
             this.setLocation(x, y);
+            //////
             try {
-            mostrarlista();
+            mostrarlista();//MUESTRA LA LISTA DEL CARRITO
         } catch (Exceptions ex) {
             Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -272,121 +274,126 @@ public class CarritoCompras extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     public void borrarPaneles(){
+        //ELIMINA TODOS LOS PANELES CREADOS EN EL PANEL "contendedor"
     for (Component componente :  contenedor.getComponents()) {
     if (componente instanceof JPanel ){
-         contenedor.remove(componente);
+         contenedor.remove(componente);//SE ELIMINA LOS PANELES
         contenedor.revalidate(); // Actualiza el contenedor
-        contenedor.repaint();
-        contenedor.updateUI();
+        contenedor.repaint();//SE VUELVE A RECREAR
+        contenedor.updateUI();//ACTUALIZA LA INTERFAZ PANEL
     
     }
-   // pan1=null;
+
 }
     }
+    
+    ///METODO PARA BORRAR EL PANEL DEL PRODUCTO A ELIMINAR Y DE LA LIST TAMBIEN
     class RemItemActionListener implements ActionListener {
-    private CarCompras item;
+    private CarCompras item;//SE CREA UN OBJETO DE ESTA CLASE
 
     public RemItemActionListener(CarCompras item) {
-        this.item = item;
+        this.item = item;//AQUI LO RESIVE DE LA OTRA CLASE INSTANCIADA
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         
-        //System.out.println(item.getIdelemnt());
-       
+        try {
+            //System.out.println(item.getIdelemnt());
+            
             //System.out.println(  catalogo.getIdcata());
-            if(adcrp.RemoverItem(item.getIdelemnt(),item)==1){
-               String nombrePanelAEliminar = item.getIdelemnt() + "";
-               // adcpr.IngresarItemCarrito(c.getIdcata());
-              
+            if(adcrp.RemoverItem(item.getIdCarrito() ,item)==1){//ENVIA EL VALOR HACIA LA CLASE CORRESPONDIENTE Y UN OBJETO DE LA MISMA CLASE
+       String nombrePanelAEliminar = item.getIdCarrito() + "";//VALOR PARA ELIMINAR EL PANEL CORRESPONDIENTE Y NO TODOS.
                 
-               for (Component componente : contenedor.getComponents()) {
-    if (componente instanceof JPanel && nombrePanelAEliminar.equals(componente.getName())) {
-        contenedor.remove(componente);
-        contenedor.revalidate(); // Actualiza el contenedor
-        contenedor.repaint(); // Repinta el contenedor
-        break; // Si se encuentra y elimina un panel con el nombre, puedes salir del bucle
-    }
-  
-}
-               
-               
-              JOptionPane.showMessageDialog(null, "Eliminado del carrito");
-            }else{
-               // JOptionPane.showMessageDialog(null, "Ya esta ingresado en el carrito");
+            
+       for (Component componente : contenedor.getComponents()) {
+        if (componente instanceof JPanel && nombrePanelAEliminar.equals(componente.getName())) {
+                 contenedor.remove(componente);
+                 contenedor.revalidate(); // Actualiza el contenedor
+                 contenedor.repaint(); // Repinta el contenedor
+                  break; // Si se encuentra y elimina un panel con el nombre, puedes salir del bucle
+                    }
+                    
+                }
+                
+                JOptionPane.showMessageDialog(null, "Eliminado del carrito");
             }
+        } catch (Exceptions ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        } 
             
         
     }
 }
     
     public void componentes(CarCompras dt){
+       //  contenedor.setLayout(new GridLayout(0,1,10,10));
+       //  contenedor.remove(elemt); 
            int id=0;
           pan1= new JPanel();
          panft = new JPanel();
- 
-              lbnbele=new JLabel("xxxxxxxxx");
-                JLabel lbft = new JLabel();
+          lbnbele=new JLabel("xxxxxxxxx");
+          JLabel lbft = new JLabel();
           btquitar= new JButton("Remover");
-          id=dt.getIdelemnt();
-          btquitar.setName(id+"");
-          pan1.setName(id+"");
-             btquitar.addActionListener(new RemItemActionListener(dt));
+          id=dt.getIdCarrito();
+          btquitar.setName(id+"");//SE AGREGA UN TAG A LOS ELEMENTOS CREADO PARA IDENTIFICAR A QUE ELEMENTO DE LA LISTA PERTENCE
+          pan1.setName(id+"");// LO MISMO CON EL PÁNEL UN TAG CON ID
+          System.out.println(pan1.getName());
+    btquitar.addActionListener(new RemItemActionListener(dt));
 panft.setPreferredSize(new Dimension(100, 100));
             
      pan1.setBackground(new Color(107, 106, 104));
      lbnbele.setText("Nombre: \n "
-      + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());
-               
-               
+      + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());//DATOS A MOSTRAR 
+     
+     //CARGA DE LA IMAGEN PARA EL PANEL DE LA IMAGEN DEL PRODUCTO
     BufferedImage imagen = dt.img();
-
     if (imagen != null) {
         // Crea un ImageIcon con la imagen
         ImageIcon icono = new ImageIcon(imagen);
-
-     
-       lbft.setIcon(icono);
-
+       lbft.setIcon(icono);//Se ingresa la imagen en el panel
     }
-        
+  //Agregacion de elementos a los paneles      
 panft.add(lbft);
-
-    pan1.add( panft);
- 
-     pan1.add(lbnbele);
-     
- pan1.add(btquitar);
-   
-  contenedor.add(pan1);
-    
-  contenedor.updateUI();
+pan1.add( panft);
+pan1.add(lbnbele);
+pan1.add(btquitar);
+contenedor.add(pan1);
+contenedor.updateUI();
        
     }
-    
+    //MUESTRA LA LISTA DEL CARRITO
     public void mostrarlista() throws Exceptions, SQLException{
-   
         contenedor.setLayout(new GridLayout(0,1,10,10));
          contenedor.remove(elemt);
-  
-        for(CarCompras dt:adcrp.Carrito()){
-             componentes(dt);
-        } 
+         try{
+              adcrp.Carrito();//CARGA LA LISTA DEL CARRITO EN UN LIST<CarCompras>
+  if(!adcrp.carrito.isEmpty()){//SE VERIFICA QUE NO ESTE VACIA LA LISTA 
+       
+        for(CarCompras dt:adcrp.carrito){
+           
+        componentes(dt);//SE AGREGAN LOS PANELES Y DEMAS COMPONENTES PARA MOSRTAR LOS DATOS DE LA LISTA
+   
+   }
+  }
+         }catch(Exceptions e){
+             //SE AGREGA UN PANEL Y UN LABEL PARA MOSTRAR QUE ESTA VACIO EL  CARRITO DE LA PERSONA
+              lbnbele = new JLabel();
+                 pan1 = new JPanel();   
+              lbnbele.setText(e.getMessage());    
+               pan1.add(lbnbele);
+              contenedor.add(pan1);
+     
+  }
     
 }
-    
-    
-    
-    
-    
+    //MUESTRA EL UNICO VALOR BUSCADO EN UN UNICO O VARIOS PANELES DADO EL CASO DE LA BUSQUEDA
     public void mostrarbusqueda(){
-       // adcrp = new AdmCompra();
+    
        borrarPaneles();
         contenedor.setLayout(new GridLayout(0,1,10,10));
-        // contenedor.remove(elemt);
+       
   try {
-     // adcrp.BuscarItemcarrito(txtbuscar.getText());
         for(CarCompras dt:adcrp.BuscarItemcarrito(txtbuscar.getText())){
              componentes(dt);
         } 
@@ -425,11 +432,13 @@ panft.add(lbft);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void BtrevertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtrevertirActionPerformed
-    
+    //SE VUELVE A CARGAR LA LISTA COMPLETA LUEGO DE REALIZAR UNA BUSQUEDA
         try {
             adcrp = new AdmCompra();
               borrarPaneles();
             mostrarlista();
+            Btrevertir.setEnabled(false);
+            txtbuscar.setText("");
         } catch (Exceptions ex) {
             Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

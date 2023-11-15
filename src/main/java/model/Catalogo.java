@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
 public class Catalogo extends Inventario {
     
     char Disponible='S';
- String datos="";
  BufferedImage imagen;
  int idcata=0,idprod, iddetall ;
     public Catalogo(){
@@ -21,20 +20,7 @@ public class Catalogo extends Inventario {
         
     }
     
-     //CONSTRUCTOR DE DATOS RESUMIDOS
-    public Catalogo(int id,int idprod,int iddetall ,String datos ,BufferedImage Imagen){
-        this.idprod=idprod;
-        this.iddetall=iddetall;
-        this.idcata=id;
-        this.datos=datos;
-       this.imagen=Imagen;
-    }
-    public Catalogo(int id, String datos ,BufferedImage Imagen){
-     
-        this.idcata=id;
-        this.datos=datos;
-       this.imagen=Imagen;
-    }
+   
      //CONSTRUCTOR
     
     public Catalogo(String nombre_proveedor,String Nombre,BufferedImage imagen, int cantidad, String tipo, String Marca, 
@@ -74,6 +60,10 @@ public class Catalogo extends Inventario {
     public BufferedImage img() {
         return imagen;
     }
+    
+ public void setimg(BufferedImage imgg) {
+        this.imagen=imgg;
+    }
 
    
 
@@ -91,6 +81,14 @@ public class Catalogo extends Inventario {
 
     public void setDatos(String datos) {
         this.datos = datos;
+    }
+
+    @Override
+    public String toString() {
+        
+    return " idcata="+idcata+"  datos=" + datos  ;
+      //return "Catalogo{" + "Disponible=" + Disponible + ", datos=" + datos + ", imagen=" + imagen + ", idcata=" + idcata + ", idprod=" + idprod + ", iddetall=" + iddetall + '}';
+    
     }
 
    
