@@ -6,6 +6,7 @@ package Visual;
 
 import Control.AdmCompra;
 import Control.AdmInventario;
+import Control.AdmVenta;
 import Control.Exceptions;
 import java.awt.Color;
 import java.awt.Component;
@@ -37,6 +38,7 @@ public class CarritoCompras extends javax.swing.JFrame {
      */
     AdmCompra adcrp;
     JPanel pan1 ,panft;
+    AdmVenta advt = new AdmVenta();
     public CarritoCompras() {
         
             initComponents();
@@ -344,7 +346,7 @@ panft.setPreferredSize(new Dimension(100, 100));
             
      pan1.setBackground(new Color(107, 106, 104));
      lbnbele.setText("Nombre: \n "
-      + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad());//DATOS A MOSTRAR 
+      + ""+dt.getNombre()+" Detalles: \n"+dt.getDetalles()+" Cantida:\n"+dt.getCantidad()+"Precio:\n"+ dt.getPrecio());//DATOS A MOSTRAR 
      
      //CARGA DE LA IMAGEN PARA EL PANEL DE LA IMAGEN DEL PRODUCTO
     BufferedImage imagen = dt.img();
@@ -373,7 +375,8 @@ contenedor.updateUI();
         for(CarCompras dt:adcrp.carrito){
            
         componentes(dt);//SE AGREGAN LOS PANELES Y DEMAS COMPONENTES PARA MOSRTAR LOS DATOS DE LA LISTA
-   
+   advt.IngresarPrecompra(dt);
+            System.out.println(dt.getNombre());
    }
   }
          }catch(Exceptions e){
@@ -428,7 +431,18 @@ contenedor.updateUI();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        try {
+            
+            FrmVenta fv = new FrmVenta(advt);
+            fv.setVisible(true);
+        } catch (Exceptions ex) {
+            Logger.getLogger(CarritoCompras.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+         
+        
+        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void BtrevertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtrevertirActionPerformed

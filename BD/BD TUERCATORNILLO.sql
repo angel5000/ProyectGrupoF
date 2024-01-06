@@ -218,41 +218,46 @@ IF EXISTS (SELECT 1 FROM Carrito WHERE ID_Producto = 1 AND ID_cliente=100) SELEC
 INSERT INTO Carrito (ID_cliente,ID_producto,ID_detallesProd)
 VALUES
     ( 100, 1,5);
+	
 
-
-	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen, ID_producto, c.ID_carrito,c.cantidad From Carrito AS C 
+	SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen, ID_producto, c.ID_carrito,c.cantidad, i.PrecioUnitario From Carrito AS C 
                  JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent 
                  JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD;
 
 
-CREATE TABLE COMPRA(
-ID_compra	INT primary key identity (1,1),
-ID_Cliente INT,
-ID_Producto int,
-ID_DetallesProd int,
+create TABLE COMPRA(
+ID_Cliente INT not null,
 Fecha_compra DATE,
-CONSTRAINT fk_dtcliente   FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_CLIENTE),
-CONSTRAINT fk_product  FOREIGN KEY (ID_Producto) REFERENCES INVENTARIO(ID_Invent),
-CONSTRAINT fk_detpro   FOREIGN KEY (ID_DetallesProd) REFERENCES Detalles_productos(ID_DetallesPRD),
-
-);
-INSERT INTO COMPRA (ID_Cliente, ID_Producto, ID_DetallesProd, Fecha_compra)
-VALUES (100, 1, 5, '2023-11-15')
-
-select*from compra
-
-select*from Detalles_Compra
-CREATE TABLE Detalles_Compra (
-    ID_DetalleCompra INT PRIMARY KEY IDENTITY(1, 1),
-    ID_Compra INT,
-    ProductoID INT,
+ ProductoID INT,
+ ID_DetallesProd int ,
     Cantidad INT,
     PrecioUnitario DECIMAL(10, 2),
 	Subttotal_compra DECIMAL (10, 2),
 Total_compra DECIMAL (10, 2)
- CONSTRAINT fk_compra   FOREIGN KEY (ID_Compra) REFERENCES COMPRA(ID_compra),
 CONSTRAINT fk_product2  FOREIGN KEY ( ProductoID) REFERENCES INVENTARIO(ID_Invent),
+CONSTRAINT fk_dtcliente   FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID_CLIENTE),
+CONSTRAINT fk_detpro   FOREIGN KEY (ID_DetallesProd) REFERENCES Detalles_productos(ID_DetallesPRD),
 );
+
+alter table compra
+drop constraint fk_dtcliente
+alter table compra
+drop constraint fk_product
+alter table compra
+drop constraint fk_detpro
+INSERT INTO COMPRA (ID_Cliente,Fecha_compra,ProductoID,ID_DetallesProd,Cantidad,PrecioUnitario,Subttotal_compra,Total_compra)
+VALUES (100, '2023-11-15',1, 5, '2023-11-15')
+
+select*from compra
+
+select*from Detalles_Compra
+drop TABLE Detalles_Compra (
+    ID_DetalleCompra INT PRIMARY KEY IDENTITY(1, 1),
+    ID_Compra INT,
+   
+);
+alter table Detalles_Compra
+drop constraint fk_product2
 INSERT INTO Detalles_Compra (ID_Compra, ProductoID, Cantidad, PrecioUnitario, Subttotal_compra, Total_compra)
 VALUES (2, 2, 5, 10.00, 50.00, 50.00);
 
@@ -280,26 +285,29 @@ VALUES  ( 1,10.2),
 CREATE TABLE Factura(
 ID_factura  INT PRIMARY KEY IDENTITY(1,1),
 Num_Factura int,
-ID_Compra int,
 ID_Cliente int,
 MetodoPago int,
 Descuento int,
 Estado char(1),
 Fecha_Vencimiento date,
 fecha_venta	DATE,
-total_venta	DECIMAL (10, 2)
-
+total_venta	DECIMAL (10, 2),
+Subtotal float,
+ID_Carrito int,
 CONSTRAINT fk_CLNTE  FOREIGN KEY (ID_cliente) REFERENCES CLIENTE(ID_cliente),
-CONSTRAINT fk_compra2   FOREIGN KEY (ID_Compra) REFERENCES Detalles_Compra(ID_DetalleCompra),
+constraint fk_carrito  FOREIGN KEY (ID_carrito) REFERENCES Carrito(ID_carrito),
 CONSTRAINT fk_TipPag  FOREIGN KEY (MetodoPago) REFERENCES FORMA_PAGO(ID_forma_pago)
 );
+use Ferreteria
+alter table Factura add 
 alter table Factura
+select*from carrito
 drop CONSTRAINT fk_compra2 
-INSERT INTO Factura (Num_Factura, ID_Compra, ID_Cliente, MetodoPago, Descuento, Estado, Fecha_Vencimiento, fecha_venta, total_venta)
-VALUES (1001, 1, 100, 1, 10, 'P', '2023-11-15', '2023-11-01', 500.00);
+INSERT INTO Factura (Num_Factura, ID_Cliente, MetodoPago, Descuento, Estado, Fecha_Vencimiento, fecha_venta, total_venta,Subtotal,ID_Carrito)
+VALUES (1001, 1, 100, 1, 10, 'P', '2023-11-15', '2023-11-01', 1.52, 14.22);
 
 select*from Factura
-
+delete from Factura  where ID_factura=4
 SELECT
     F.ID_factura,
     F.Num_Factura,
@@ -310,28 +318,28 @@ SELECT
     C.correo_electronico AS CorreoCliente,
     C.Telefono AS TelefonoCliente,
     C.Fecha_Nacimineto AS FechaNacimientoCliente,
+	i.NombreProducto,
+	dp.Marca,
+	  cr.cantidad,
     F.MetodoPago,
     F.Descuento,
     F.Estado,
     F.Fecha_Vencimiento,
     F.fecha_venta,
-    F.total_venta,
-    DC.Cantidad,
-    DC.PrecioUnitario AS PrecioUnitarioProducto,
-    DC.Subttotal_compra AS SubtotalCompra,
-    DC.Total_compra AS TotalCompra,
-   /* P.NombreProducto AS NombreProducto,*/
-    DP.Descripcion AS DescripcionProducto
+	F.subtotal,
+    F.total_venta
 FROM Factura F
-INNER JOIN COMPRA Cmp ON F.ID_Compra = f.ID_Compra
 INNER JOIN CLIENTE C ON F.ID_Cliente = C.ID_cliente
-INNER JOIN Detalles_Compra DC ON Cmp.ID_compra = DC.ID_Compra
-INNER JOIN INVENTARIO I ON DC.ProductoID = I.ID_Invent
-INNER JOIN Detalles_Productos DP ON I.ID_Invent = DP.ProductoID
-
+INNER JOIN Carrito cr  ON cr.ID_cliente=F.ID_cliente
+INNER JOIN Detalles_Productos DP ON cr.ID_producto = DP.ProductoID
+inner join inventario i on cr.ID_producto=i.ID_Invent
 WHERE C.ID_cliente = 100;
-
-
+update factura set total_venta=2.8 where
+select*from INVENTARIO
+select*from Carrito
+select*from Detalles_Productos
+select*from COMPRA
+select*from Detalles_Compra
 select total_venta FROM Factura F
 INNER JOIN COMPRA Cmp ON F.ID_Compra =1
 

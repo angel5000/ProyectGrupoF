@@ -14,11 +14,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionBD {
-    private static final String HOSTNAME = "localhost";
-    private static final String SQL_INSTANCE_NAME = "DESKTOP-BUQ5QOC";
-    private static final String SQL_DATABASE = "Ferreteria";
-    private static final String SQL_USER = "sa";
-    private static final String SQL_PASSWORD = "Angpro500";
+ 
 
     public static Connection conectar() throws SQLException {
         try {

@@ -22,11 +22,13 @@ import model.ConexionBD;
  * @author angeldvvp
  */
 public class AdmCompra {
+    CarCompras crp;
    public  List<CarCompras> carrito = new ArrayList<>();
 int idProducto=0;int resultado=0, valor=0;
-    public void Carrito()throws Exceptions, SQLException{
+    public List<CarCompras> Carrito()throws Exceptions, SQLException{
         //CONSULTA HACIA LA BASE DE DATOS ENTRE LAS TABLAS CLIENTE INVENTARIO Y CARRITO
-         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad FROM Carrito AS C "
+         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad "
+                 + ",i.PrecioUnitario FROM Carrito AS C "
                  + "JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent "
                  + "JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD";
         
@@ -39,13 +41,15 @@ int idProducto=0;int resultado=0, valor=0;
             }else{
                 rs = stmt.executeQuery();
             while (rs.next()) {//RECORRIDO DE DATOS
-              CarCompras crp= new CarCompras();
+               crp= new CarCompras();
              crp.setIdCarrito(rs.getInt("ID_carrito"));
              crp.setIdUsua(rs.getInt("ID_cliente")); 
              crp.setIdelemnt(rs.getInt("ID_producto")); 
                crp.setNombre(rs.getString("NombreProducto")); 
                 crp.setDetalles(rs.getString("Descripcion")); 
               crp.setCantidad(rs.getInt("cantidad"));
+              crp.setPrecio(rs.getFloat("PrecioUnitario"));
+              
                byte[] imagenBytes=rs.getBytes("Imagen");
                
                BufferedImage imagen = null;
@@ -70,11 +74,13 @@ int idProducto=0;int resultado=0, valor=0;
         
         
         
-      //  return carrito;
+        return carrito;
         
         
     }
-    
+    public CarCompras carconcep(){
+        return crp;
+    }
     public void IngresarItemCarrito(int IDCatalogo, int cantidad) throws Exceptions, SQLException{
        
     //METODO QUE INGRESADO LOS ITEM A LA CLASE CARRITO

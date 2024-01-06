@@ -19,6 +19,19 @@ public class CarCompras {
     public CarCompras(){
         
     }
+     public CarCompras(int idUsua,int idelemnt,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
+  this.idUsua=idUsua;
+      this.idelemnt=idelemnt;
+       this.Nombre=Nombre;
+       this.cantidad=cantidad;
+       this.tipo=tipo;
+       this.Marca=Marca;
+       this.Detalles=Detalles;
+       this.precio=precio;
+         
+   }
+    
+    
      public CarCompras(int idUsua,int idCarrito,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
       this.idelemnt=idelemnt;
        this.idCarrito= idCarrito;
