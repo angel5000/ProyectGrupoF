@@ -7,6 +7,7 @@ package Control;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,65 +24,121 @@ import model.Factura;
  *
  * @author angeldvvp
  */
+
 public class AdmFactura  {
-        
-        public  List<Factura> factura = new ArrayList<>();
-int idProducto=0;int resultado=0, valor=0;
-    public List<Factura> ingresarfactura()throws Exceptions, SQLException{
-        //CONSULTA HACIA LA BASE DE DATOS ENTRE LAS TABLAS CLIENTE INVENTARIO Y CARRITO
-         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad "
-                 + ",i.PrecioUnitario FROM Carrito AS C "
-                 + "JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent "
-                 + "JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD";
-        
-        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
-             PreparedStatement stmt = conn.prepareStatement(query);
-           ) {
-              ResultSet rs = stmt.executeQuery();
-            if(!rs.next()){
-                throw new  Exceptions("Su carrito esta vacio");
-            }else{
-                rs = stmt.executeQuery();
-            while (rs.next()) {//RECORRIDO DE DATOS
-             /*  crp= new CarCompras();
-             crp.setIdCarrito(rs.getInt("ID_carrito"));
-             crp.setIdUsua(rs.getInt("ID_cliente")); 
-             crp.setIdelemnt(rs.getInt("ID_producto")); 
-               crp.setNombre(rs.getString("NombreProducto")); 
-                crp.setDetalles(rs.getString("Descripcion")); 
-              crp.setCantidad(rs.getInt("cantidad"));
-              crp.setPrecio(rs.getFloat("PrecioUnitario"));*/
-              
-               byte[] imagenBytes=rs.getBytes("Imagen");
-               
-               BufferedImage imagen = null;
-               
-        if (imagenBytes!= null) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
-                imagen = ImageIO.read(bis);
-                //  ExcepcionIngresoCRP();
-            } catch (IOException e) {
-                e.printStackTrace();
+    Factura fact;
+         List<Factura>  factura= new ArrayList<>();
+  public List<Factura> Mostrarfactura(int idcliente)throws Exceptions{
+        String consultaCatalogo="{CALL MostrarDatosFactura (?)}";
+        try (Connection conn = ConexionBD.conectar();
+           CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
+            {
+                stmt.setInt(1, idcliente);
+                
+                 
+                stmt.execute();
+               // boolean tieneResultados =  stmt.getMoreResults();
+              //  while (tieneResultados) {
+                    try (ResultSet resultSet =  stmt.getResultSet()) {
+                        while (resultSet.next()) {
+                            fact = new Factura();
+                            fact.setIdfactura(resultSet.getInt("Num_Factura"));
+                              fact.setFechavencimiento(resultSet.getDate("Fecha_Vencimiento"));
+                                  fact.setFechaCompra(resultSet.getDate("fecha_venta"));
+                                  fact.setCedula(resultSet.getString("CedulaCliente"));
+                            fact.setNombres(resultSet.getString("NombreCliente"));
+                            fact.setApellidos(resultSet.getString("ApellidoCliente"));
+                             fact.setDireccion(resultSet.getString("DireccionCliente"));
+                            fact.setCorreo_electronico(resultSet.getString("CorreoCliente"));
+                            fact.setTelefono(resultSet.getString("TelefonoCliente"));
+                            
+      
+        factura.add(fact);
+                            
+                        }
+                   // }
+                   // tieneResultados =  stmt.getMoreResults();
+                }
             }
-        }/*crp.setBufferedImage(imagen);
-                carrito.add( crp);*/
-            }
-            }
-        } catch (SQLException e) {
+         catch (SQLException e) {
             e.printStackTrace();
-              JOptionPane.showMessageDialog(null,  e.getMessage());
         }
-   
+       /*  String factu="{CALL ItemsFactura (?)}";
+      try (Connection conn = ConexionBD.conectar();
+           CallableStatement stmt = conn.prepareCall(factu);)
+            {
+                stmt.setInt(1, idcliente);
+                
+                 
+                stmt.execute();
+               // boolean tieneResultados =  stmt.getMoreResults();
+              //  while (tieneResultados) {
+                    try (ResultSet resultSet =  stmt.getResultSet()) {
+                        while (resultSet.next()) {
+                            
+                               fact.setNombre(resultSet.getString("NombreProducto"));
+                             fact.setMarca(resultSet.getString("Marca"));
+                             fact.setCantidad(resultSet.getInt("Cantidad"));
+                            fact.setPrecio(resultSet.getFloat("PrecioUnitario"));
+                            fact.setSubtotal(resultSet.getFloat("Subttotal_compra"));
+     fact.setTotal(resultSet.getFloat("Total_compra"));
+      
+      
         
         
-        
-        return factura;
-        
-        
-    }
-   
+        factura.add(fact);
+                            System.out.println(factura.toString());
+                        }
+                   // }
+                   // tieneResultados =  stmt.getMoreResults();
+                }
+            }
+         catch (SQLException e) {
+            e.printStackTrace();
+        }*/
+     
+return factura;
+}
         
     
     
+         List<Factura>  facturaitem= new ArrayList<>();
+  public List<Factura> Mostrarfacturaitem(int idcliente)throws Exceptions{
+    
+         String factu="{CALL ItemsFactura (?)}";
+      try (Connection conn = ConexionBD.conectar();
+           CallableStatement stmt = conn.prepareCall(factu);)
+            {
+                stmt.setInt(1, idcliente);
+                
+                 
+                stmt.execute();
+               // boolean tieneResultados =  stmt.getMoreResults();
+              //  while (tieneResultados) {
+                    try (ResultSet resultSet =  stmt.getResultSet()) {
+                        while (resultSet.next()) {
+                            fact= new Factura();
+                               fact.setNombre(resultSet.getString("NombreProducto"));
+                             fact.setMarca(resultSet.getString("Marca"));
+                             fact.setCantidad(resultSet.getInt("Cantidad"));
+                            fact.setPrecio(resultSet.getFloat("PrecioUnitario"));
+                            fact.setSubtotal(resultSet.getFloat("Subttotal_compra"));
+     fact.setTotal(resultSet.getFloat("Total_compra"));
+      
+      
+        
+        
+        facturaitem.add(fact);
+                            System.out.println(facturaitem.toString());
+                        }
+                   // }
+                   // tieneResultados =  stmt.getMoreResults();
+                }
+            }
+         catch (SQLException e) {
+            e.printStackTrace();
+        }
+     
+return  facturaitem;
+}
 }

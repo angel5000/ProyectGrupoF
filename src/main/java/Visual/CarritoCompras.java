@@ -4,7 +4,8 @@
  */
 package Visual;
 
-import Control.AdmCompra;
+import Control.AdmCarrito;
+import Control.AdmCompras;
 import Control.AdmInventario;
 import Control.AdmVenta;
 import Control.Exceptions;
@@ -36,14 +37,14 @@ public class CarritoCompras extends javax.swing.JFrame {
     /**
      * Creates new form CarritoCompras
      */
-    AdmCompra adcrp;
+    AdmCarrito adcrp;
     JPanel pan1 ,panft;
-    AdmVenta advt = new AdmVenta();
+    AdmCompras advt = new AdmCompras();
     public CarritoCompras() {
         
             initComponents();
              Btrevertir.setEnabled(false);
-            adcrp = new AdmCompra();
+            adcrp = new AdmCarrito();
             FrmCompras fr = new FrmCompras();
             //CENTRAR VENTANA/////
             int anchoVentanaPrincipal = fr .getWidth();
@@ -448,7 +449,7 @@ contenedor.updateUI();
     private void BtrevertirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtrevertirActionPerformed
     //SE VUELVE A CARGAR LA LISTA COMPLETA LUEGO DE REALIZAR UNA BUSQUEDA
         try {
-            adcrp = new AdmCompra();
+            adcrp = new AdmCarrito();
               borrarPaneles();
             mostrarlista();
             Btrevertir.setEnabled(false);

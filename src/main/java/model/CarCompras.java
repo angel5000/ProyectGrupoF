@@ -15,13 +15,13 @@ public class CarCompras {
     byte Imagen; private String Nombre=""; private int cantidad; 
     private String tipo; private String Marca; private String Detalles; private float precio;
     int idUsua=0,idelemnt=0;
-    BufferedImage imagen;int idCarrito=0;
+    BufferedImage imagen;int idCarrito=0, iddetalle, idcompra;
     public CarCompras(){
         
     }
-     public CarCompras(int idUsua,int idelemnt,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
+     public CarCompras(int idUsua,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
   this.idUsua=idUsua;
-      this.idelemnt=idelemnt;
+
        this.Nombre=Nombre;
        this.cantidad=cantidad;
        this.tipo=tipo;
@@ -32,8 +32,9 @@ public class CarCompras {
    }
     
     
-     public CarCompras(int idUsua,int idCarrito,int idelemnt,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
+     public CarCompras(int idUsua,int idCarrito,int idelemnt,int id_Detalle,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio ){
       this.idelemnt=idelemnt;
+        this.iddetalle=id_Detalle;
        this.idCarrito= idCarrito;
        this.idUsua=idUsua;
        this.Imagen=Imagen;
@@ -66,6 +67,14 @@ public class CarCompras {
 
     public int getIdUsua() {
         return idUsua;
+    }
+
+    public int getIddetalle() {
+        return iddetalle;
+    }
+
+    public void setIddetalle(int iddetalle) {
+        this.iddetalle = iddetalle;
     }
 
     public void setIdUsua(int idUsua) {

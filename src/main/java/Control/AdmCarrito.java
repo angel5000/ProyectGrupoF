@@ -21,13 +21,13 @@ import model.ConexionBD;
  *
  * @author angeldvvp
  */
-public class AdmCompra {
+public class AdmCarrito {
     CarCompras crp;
    public  List<CarCompras> carrito = new ArrayList<>();
 int idProducto=0;int resultado=0, valor=0;
     public List<CarCompras> Carrito()throws Exceptions, SQLException{
         //CONSULTA HACIA LA BASE DE DATOS ENTRE LAS TABLAS CLIENTE INVENTARIO Y CARRITO
-         String query = "SELECT C.ID_cliente, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad "
+         String query = "SELECT C.ID_cliente,C.ID_DetallesProd, I.NombreProducto, DP.Descripcion, I.Imagen , ID_producto, c.ID_carrito,c.cantidad "
                  + ",i.PrecioUnitario FROM Carrito AS C "
                  + "JOIN INVENTARIO AS I ON C.ID_Producto = I.ID_Invent "
                  + "JOIN Detalles_productos AS DP ON C.ID_DetallesProd = DP.ID_DetallesPRD";
@@ -49,7 +49,7 @@ int idProducto=0;int resultado=0, valor=0;
                 crp.setDetalles(rs.getString("Descripcion")); 
               crp.setCantidad(rs.getInt("cantidad"));
               crp.setPrecio(rs.getFloat("PrecioUnitario"));
-              
+              crp.setIddetalle(rs.getInt("ID_DetallesProd"));
                byte[] imagenBytes=rs.getBytes("Imagen");
                
                BufferedImage imagen = null;

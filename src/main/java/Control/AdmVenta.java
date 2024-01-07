@@ -4,36 +4,107 @@
  */
 package Control;
 
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 import model.CarCompras;
+import model.Compra;
+import model.ConexionBD;
+import model.Factura;
 
 /**
  *
  * @author angeldvvp
  */
 public class AdmVenta {
- 
-    
-   List<CarCompras>  carrito = new ArrayList<>();
-     CarCompras crp;
+ Factura fact; int idmetpago=0;
+    public void IngresarMETPAGO(int idclient, int metodo){
+        String consultaCatalogo="{CALL InsertarFormaPago (?, ?,?)}";
+        try (Connection conn = ConexionBD.conectar();
+           CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
+            {
+                stmt.setInt(1, idclient);
+                stmt.setInt(2, metodo);
+                   stmt.registerOutParameter(3, java.sql.Types.INTEGER); // Configura el parámetro de salida
 
+               
+                 
+                stmt.execute();
+               idmetpago= stmt.getInt(3);
+                System.out.println("Codigo compra ingresado."+  idmetpago);
+                System.out.println("Metopago ingresado"+idclient+" "+metodo);
+             stmt.close();
+            }
+         catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public int idpago(){
+        return  idmetpago;
+    }
+    
+      public  List<Factura> factura = new ArrayList<>();
+    public void ingresarfactura(int idCliente,int metodoPago, String estado,
+            String fechaVencimiento,double subtotal, double totalVenta ,int idCompra)throws Exceptions, SQLException{
+        int numfac=0;
+     String consultaCatalogo="{CALL InsertarFactura ( ?, ?, ?, ?, ?, ?, ?,?)}";
+        try (Connection conn = ConexionBD.conectar();
+           CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
+            {
+               System.out.println("ingreso factura");
+                
+                stmt.setInt(1, idCliente);
+                stmt.setInt(2, metodoPago);
+                stmt.setString(3, estado);
+                stmt.setString(4, fechaVencimiento);
+                stmt.setDouble(5, subtotal);
+                stmt.setDouble(6, totalVenta);
+                stmt.setDouble(7, idCompra);
+                stmt.registerOutParameter(8, java.sql.Types.INTEGER); // Configura el parámetro de salida
+
+                 stmt.execute();
+                   numfac = stmt.getInt(8);
    
- public void IngresarPrecompra(CarCompras cmpr )throws Exceptions{
-     
-       crp = cmpr;
-     carrito.add(crp);
-     System.out.println("metodo: "+crp.getNombre());
-    
-}    
+                    System.out.println("Número de factura generado: " + numfac);
+                
+                 
+                fact= new Factura();
+                
+        // Define el formato de la cadena de fecha
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
-    public List<CarCompras> MostrarPrecompra()throws Exceptions{
      
-return carrito;
+            // Convierte la cadena de fecha a un objeto Date
+            Date fecha = formato.parse(fechaVencimiento);
+  Date fechaActual = new Date();
+
+        
+               
+                System.out.println("Inserción exitosa.");
+               // System.out.println(factura.toString()+" "+fact.getIdUsua());
+            }
+         catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException ex) {
+         Logger.getLogger(AdmVenta.class.getName()).log(Level.SEVERE, null, ex);
+     }
+       
+    }
+public Factura fac(){
+    return fact;
 }
-
-   
-    
-    
+}
  
-}
+

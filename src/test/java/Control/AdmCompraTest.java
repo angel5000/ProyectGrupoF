@@ -40,12 +40,12 @@ public class AdmCompraTest {
     }
 
     /**
-     * Test of Carrito method, of class AdmCompra.
+     * Test of Carrito method, of class AdmCarrito.
      */
     @Test
     public void testCarrito() throws Exception {
         System.out.println("Carrito");
-        AdmCompra instance = new AdmCompra();
+        AdmCarrito instance = new AdmCarrito();
        // List<CarCompras> expResult = null;
      //   List<CarCompras> result = instance.Carrito();
        // System.out.println(result.toString());
@@ -55,21 +55,21 @@ public class AdmCompraTest {
     }
 
     /**
-     * Test of IngresarItemCarrito method, of class AdmCompra.
+     * Test of IngresarItemCarrito method, of class AdmCarrito.
      */
     @Test
     public void testIngresarItemCarrito() throws Exception {
         System.out.println("IngresarItemCarrito");
         int IDCatalogo = 2;
         int cantidad = 4;
-        AdmCompra instance = new AdmCompra();
+        AdmCarrito instance = new AdmCarrito();
         instance.IngresarItemCarrito(IDCatalogo, cantidad);
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
 
     /**
-     * Test of BuscarItemcarrito method, of class AdmCompra.
+     * Test of BuscarItemcarrito method, of class AdmCarrito.
      */
     @Test
     public void testBuscarItemcarrito() throws Exception {
@@ -78,7 +78,7 @@ public class AdmCompraTest {
           byte img=0;
           CarCompras Item = new CarCompras();
     
-        AdmCompra instance = new AdmCompra();
+        AdmCarrito instance = new AdmCarrito();
         
         List<CarCompras> expResult = new java.util.ArrayList<>();
         expResult.add(new CarCompras(100,104,1,img,"Perno Hexagonal 1/4",1,
@@ -89,7 +89,7 @@ public class AdmCompraTest {
     }
 
     /**
-     * Test of RemoverItem method, of class AdmCompra.
+     * Test of RemoverItem method, of class AdmCarrito.
      */
     @Test
     public void testRemoverItem() throws Exceptions {
@@ -98,7 +98,7 @@ public class AdmCompraTest {
         gt.setIdCarrito(110);
         int idProducto = 110;
         CarCompras elem = gt;
-        AdmCompra instance = new AdmCompra();
+        AdmCarrito instance = new AdmCarrito();
         int expResult = 1;
         int result = instance.RemoverItem(idProducto, elem);
         assertEquals(expResult, result);

@@ -5,7 +5,7 @@
 package Visual;
 
 
-import Control.AdmCompra;
+import Control.AdmCarrito;
 import Control.AdmInventario;
 import Control.Admcatalog;
 import Control.Exceptions;
@@ -36,7 +36,7 @@ public class FrmCompras extends javax.swing.JFrame {
      * Creates new form FrmProductos
      */
     Admcatalog ct;
-    AdmCompra adcpr = new AdmCompra();int cantidad=1;
+    AdmCarrito adcpr = new AdmCarrito();int cantidad=1;
       JPanel pan1 ,panft;
       SpinnerModel modelo;
     public FrmCompras() {

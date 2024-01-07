@@ -4,12 +4,16 @@
  */
 package Visual;
 
-import Control.AdmCompra;
+import Control.AdmCarrito;
+import Control.AdmCompras;
 import Control.AdmFactura;
 import Control.AdmVenta;
 import Control.Exceptions;
+import Control.GenerarFactura;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.CarCompras;
 
@@ -19,13 +23,14 @@ import model.CarCompras;
  */
 public class FrmVenta extends javax.swing.JFrame {
  private DefaultTableModel modeloTabla;
-AdmVenta advt;
+AdmCompras advt;
 CarCompras cpm;
+int idcliente=0, METPAGO=1;
     /**
      * Creates new form FrmProforma
      * @param adcpr
      */
-    public FrmVenta(AdmVenta vtn) throws Exceptions {
+    public FrmVenta(AdmCompras vtn) throws Exceptions {
       //  FrmVenta venta = new FrmVenta();
     initComponents();
     advt=vtn;
@@ -51,6 +56,7 @@ CarCompras cpm;
              Object[] fila = {crp.getNombre(),crp.getCantidad(),crp.getPrecio(),0.12,subtotal,total};
              TB.addRow(fila);
              TB.fireTableDataChanged();
+             idcliente=crp.getIdUsua();
          }
      } catch (Exception ex) {
          Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
@@ -142,6 +148,7 @@ CarCompras cpm;
         jLabel21.setText("Tipo de Pago:");
 
         buttonGroup1.add(rbtnEfectivo);
+        rbtnEfectivo.setSelected(true);
         rbtnEfectivo.setText("Efectivo");
         rbtnEfectivo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,7 +157,12 @@ CarCompras cpm;
         });
 
         buttonGroup1.add(rbtnTarjeta);
-        rbtnTarjeta.setText("Tarjeta");
+        rbtnTarjeta.setText("Tarjeta Credito/Debito");
+        rbtnTarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbtnTarjetaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -160,14 +172,14 @@ CarCompras cpm;
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblTelefono)
-                            .addComponent(lblCorreo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(rbtnTarjeta)
-                        .addGap(46, 46, 46))
+                        .addComponent(lblCorreo)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lblTelefono)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(rbtnTarjeta))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(lblCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -319,18 +331,55 @@ CarCompras cpm;
     }// </editor-fold>//GEN-END:initComponents
 
     private void rbtnEfectivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnEfectivoActionPerformed
-        // TODO add your handling code here:
+      METPAGO=1;
     }//GEN-LAST:event_rbtnEfectivoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     if(rbtnEfectivo.isSelected()||rbtnTarjeta.isSelected()){
+        advt.ingresarcodcompra( idcliente);
+        double sub=0,tot=0;
+        try {
+            for ( CarCompras crp : advt.MostrarPrecompra()) {
+                
+                double subtotal=crp.getPrecio()*0.12;
+                 sub=sub+subtotal;
+                double total=crp.getPrecio()+subtotal;
+                 tot=tot+total;
+                advt.ingresarcompra(crp.getIdUsua(), crp.getIdelemnt(), crp.getIddetalle(),crp.getCantidad(),crp.getPrecio(),
+                        subtotal, total);
+            }
+        } catch (Exceptions ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        AdmFactura ft = new AdmFactura();
+      AdmVenta vt = new AdmVenta();
+      vt.IngresarMETPAGO(idcliente,METPAGO);
+        try {
+            vt.ingresarfactura( idcliente, vt.idpago(), "A", "2025-12-12", sub, tot ,advt.idcomra());
+            System.out.println("aqui");
+                   
+             AdmFactura ft = new AdmFactura();
+       GenerarFactura gf = new GenerarFactura();
+       gf.mostrardatos(ft,idcliente);
+        } catch (Exceptions ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
        // ft.ingresarfactura(cpm);
+    }else{
+        JOptionPane.showMessageDialog(null,"SELECCIONE UN METODO DE PAGO");
     }
         
         
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void rbtnTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtnTarjetaActionPerformed
+        METPAGO=2;
+    }//GEN-LAST:event_rbtnTarjetaActionPerformed
 
     /**
      * @param args the command line arguments
