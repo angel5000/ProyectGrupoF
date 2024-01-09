@@ -15,13 +15,14 @@ public class Factura extends Compra implements DatosCliente{
      int idfactura=0; Date fechavencimiento;
      String Cedula, nombres, Apellidos,   Direccion,
              correo_electronico,  Telefono;
+     double subtofac=0,totalfac=0;
      public Factura(){}
      
      public Factura(String Cedula, String nombres, String Apellidos,  String Direccion,
             String correo_electronico, String Telefono,
              
              int idfactura,int idUsua,int idcompra,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio,
-           double subtotal,double total,Date FechaCompra, Date fechavencimiento){
+           double subtotal,double total,Date FechaCompra, Date fechavencimiento, double subtofac,double totalfac){
     super( idUsua, idcompra, Nombre, cantidad, tipo, Marca,Detalles, precio,
            subtotal, total, FechaCompra);
     this.Cedula = Cedula;
@@ -34,6 +35,8 @@ public class Factura extends Compra implements DatosCliente{
        
        this.idfactura=idfactura;
     this.fechavencimiento=fechavencimiento;
+    this.subtofac=subtofac;
+    this.totalfac=totalfac;
          
    }
 
@@ -135,6 +138,22 @@ public class Factura extends Compra implements DatosCliente{
     @Override
     public void setCorreoElectronico(String email) {
         email= correo_electronico;
+    }
+
+    public double getSubtofac() {
+        return subtofac;
+    }
+
+    public void setSubtofac(double subtofac) {
+        this.subtofac = subtofac;
+    }
+
+    public double getTotalfac() {
+        return totalfac;
+    }
+
+    public void setTotalfac(double totalfac) {
+        this.totalfac = totalfac;
     }
     
     

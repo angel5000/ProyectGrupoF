@@ -27,7 +27,17 @@
     
     <dependencies>
         
-        
+        <dependency>
+        <groupId>com.itextpdf</groupId>
+        <artifactId>itext-core</artifactId>
+        <version>8.0.2</version>
+        <type>pom</type>
+    </dependency>
+<dependency>
+<groupId>Temas</groupId>
+  <artifactId>Temas-tatto</artifactId>
+  <version>1.6</version>
+</dependency>
         
         
         <!-- https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc -->
@@ -36,12 +46,7 @@
     <artifactId>mssql-jdbc</artifactId>
     <version>12.4.1.jre11</version>
 </dependency>
- <dependency>
-        <groupId>com.itextpdf</groupId>
-        <artifactId>itext-core</artifactId>
-        <version>8.0.2</version>
-        <type>pom</type>
-    </dependency>
+ 
     
     <dependency>
     <groupId>org.slf4j</groupId>

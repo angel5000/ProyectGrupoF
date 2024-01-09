@@ -34,12 +34,13 @@ public class AdmFactura  {
            CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
             {
                 stmt.setInt(1, idcliente);
-                
-                 
+
                 stmt.execute();
-               // boolean tieneResultados =  stmt.getMoreResults();
-              //  while (tieneResultados) {
+            
                     try (ResultSet resultSet =  stmt.getResultSet()) {
+                        if(!resultSet.next()){
+                            throw new Exceptions("NO SE PUDO CARGAR LOS DATOS A LA FACTURA");
+                        }else{
                         while (resultSet.next()) {
                             fact = new Factura();
                             fact.setIdfactura(resultSet.getInt("Num_Factura"));
@@ -51,13 +52,14 @@ public class AdmFactura  {
                              fact.setDireccion(resultSet.getString("DireccionCliente"));
                             fact.setCorreo_electronico(resultSet.getString("CorreoCliente"));
                             fact.setTelefono(resultSet.getString("TelefonoCliente"));
-                            
-      
+                            fact.setSubtofac(resultSet.getFloat("Subtotal"));
+                              fact.setTotalfac(resultSet.getFloat("total_venta"));
+                            System.out.println(resultSet.getFloat("Subtotal")+"subtotal");
         factura.add(fact);
                             
                         }
-                   // }
-                   // tieneResultados =  stmt.getMoreResults();
+                        }
+                   
                 }
             }
          catch (SQLException e) {

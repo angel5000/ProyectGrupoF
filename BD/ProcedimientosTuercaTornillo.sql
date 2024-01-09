@@ -1,4 +1,34 @@
 use Ferreteria;
+
+create PROCEDURE VerificarUsuario
+    @Usuario VARCHAR(50),
+    @Contrasena VARCHAR(50),
+	@IDUsuario INT OUTPUT
+
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+   set @IDUsuario=null;
+
+    -- Verificar si el usuario y contraseña existen
+    SELECT @IDUsuario=ID_DatosUsuario
+    FROM  UsuariosClientes
+    WHERE  Usuario =@Usuario and HashedContrasena =  HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), Salt) + @Contrasena);
+
+
+    -- Devolver el ID del usuario si existe
+    IF @Contrasena IS NOT NULL
+        SELECT @IDUsuario AS 'ID del Usuario';
+    ELSE
+        PRINT 'Usuario o contraseña incorrectos';
+
+END;
+
+
+
+
+
 /*drop PROCEDURE InsertarFactura
     @Num_Factura INT,
     @ID_Cliente INT,
@@ -50,19 +80,26 @@ EXEC InsertarFactura
 -- Ahora @NuevoID contendrá el número de factura generado
 PRINT 'Número de factura generado: ' + CAST(@NuevoID AS VARCHAR(10));
 
-drop PROCEDURE InsertarCompra
-    @ID_Cliente INT,
-    @ProductoID INT,
-    @ID_DetallesProd INT,
-    @Cantidad INT,
-    @PrecioUnitario DECIMAL(10, 2),
-    @Subtotal_compra DECIMAL(10, 2),
-    @Total_compra DECIMAL(10, 2)
+create PROCEDURE MOSTRARINVENTARIO
+   
 AS
 BEGIN
-    INSERT INTO COMPRA (ID_Cliente, ProductoID, ID_DetallesProd, Cantidad, PrecioUnitario, Subttotal_compra, Total_compra)
-    VALUES (@ID_Cliente, @ProductoID, @ID_DetallesProd, @Cantidad, @PrecioUnitario, @Subtotal_compra, @Total_compra);
+   SELECT i.ID_Invent,i.NombreProducto,i.Stock,i.Fecha_Ingreso,i.PrecioUnitario,i.catalogo,
+   c.ID_DetallesPRD,c.Descripcion, c.Marca
+   FROM INVENTARIO i
+     inner join Detalles_Productos c on i.ID_Invent=c.ProductoID
 END;
+exec MOSTRARINVENTARIO
+CREATE PROCEDURE DETALLESPRODUC
+   
+AS
+BEGIN
+   SELECT ID_DetallesPRD,Descripcion, Marca FROM Detalles_Productos
+END;
+
+SELECT*FROM INVENTARIO
+select*from Detalles_Productos
+
 CREATE PROCEDURE InsertarCompra
     @ID_Cliente INT,
     @ProductoID INT,
@@ -123,7 +160,6 @@ BEGIN
 	 SET @NuevoID = SCOPE_IDENTITY();
 END;
 
-
 create PROCEDURE MostrarDatosFactura
     @ID_Cliente INT
 AS
@@ -138,13 +174,15 @@ BEGIN
     C.Apellidos AS ApellidoCliente,
     C.Direccion AS DireccionCliente,
     C.correo_electronico AS CorreoCliente,
-    C.Telefono AS TelefonoCliente
+    C.Telefono AS TelefonoCliente,
+	F.Subtotal,
+	f.total_venta
 		
     FROM Factura F
     INNER JOIN CLIENTE C ON F.ID_Cliente = C.ID_cliente
     WHERE C.ID_cliente = @ID_Cliente;
 
-  
+
    
 END;
 create PROCEDURE ItemsFactura

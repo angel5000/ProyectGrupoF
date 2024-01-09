@@ -5,6 +5,7 @@
 package model;
 
 import java.awt.image.BufferedImage;
+import java.util.Date;
 
 
 /**
@@ -16,8 +17,11 @@ public class Inventario extends Productos{
     public Inventario(){
         //CONSTRUCTOR VACIO EVITA EL INGRESO INNCESARIO DE DATOS DEL CONSTRUCCION INFERIOR
     }
-    String datos;BufferedImage imagen;
-    
+    String datos;BufferedImage imagen; 
+    Date fechaingreso;
+    int idinven=0;
+    int iddetal=0;
+    char catalogo='N';
     //CONSTRUCTOR DE DATOS RESUMIDOS
     public Inventario(String datos, BufferedImage imagen){
         this.datos=datos;
@@ -29,13 +33,42 @@ public class Inventario extends Productos{
         
     }
     
-    public Inventario(int ID_proveedor, String nombre_proveedor, String Tipo_Proveedor, String RUC, String direccion,
-            String Correo_electronico, String telefono,byte Imagen,String Nombre, int cantidad, String tipo, String Marca, String Detalles, float precio, String UbicAlma){
+    public Inventario(int idinven,int iddetal,int ID_proveedor, String nombre_proveedor, String Tipo_Proveedor, String RUC, String direccion,
+            String Correo_electronico, String telefono,byte Imagen,String Nombre, int cantidad, String tipo, 
+            String Marca, String Detalles, float precio, String UbicAlma, Date fechaingreso, char catalogo){
        super( ID_proveedor,  nombre_proveedor,  Tipo_Proveedor, RUC,  direccion,
          Correo_electronico, telefono,Imagen,Nombre,cantidad,tipo,Marca,Detalles,precio);
        this.UbicAlmacen=UbicAlma;
+       this.fechaingreso=fechaingreso;
+       this.idinven=idinven;
+       this.iddetal= iddetal;
+       this.catalogo=catalogo;
     }
 //SET Y GETS
+
+    public int getIddetal() {
+        return iddetal;
+    }
+
+    public void setIddetal(int iddetal) {
+        this.iddetal = iddetal;
+    }
+
+    public int getIdinven() {
+        return idinven;
+    }
+
+    public void setIdinven(int idinven) {
+        this.idinven = idinven;
+    }
+
+    public Date getFechaingreso() {
+        return fechaingreso;
+    }
+
+    public void setFechaingreso(Date fechaingreso) {
+        this.fechaingreso = fechaingreso;
+    }
     
     public String getdatos(){
         return datos;
@@ -73,6 +106,14 @@ public class Inventario extends Productos{
 
     public void setProveedor(String Proveedor) {
         this.Proveedor = Proveedor;
+    }
+
+    public char getCatalogo() {
+        return catalogo;
+    }
+
+    public void setCatalogo(char catalogo) {
+        this.catalogo = catalogo;
     }
     
 }

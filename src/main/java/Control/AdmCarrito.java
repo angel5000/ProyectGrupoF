@@ -81,7 +81,7 @@ int idProducto=0;int resultado=0, valor=0;
     public CarCompras carconcep(){
         return crp;
     }
-    public void IngresarItemCarrito(int IDCatalogo, int cantidad) throws Exceptions, SQLException{
+    public void IngresarItemCarrito(int IDCatalogo, int cantidad, int idcliente) throws Exceptions, SQLException{
        
     //METODO QUE INGRESADO LOS ITEM A LA CLASE CARRITO
          String sql = "INSERT INTO Carrito (ID_Cliente, ID_Producto, ID_DetallesProd,cantidad) VALUES (?, ?, ?, ?)";
@@ -101,7 +101,7 @@ int idProducto=0;int resultado=0, valor=0;
                   
                     String insertCarrito = "INSERT INTO Carrito (ID_cliente, ID_producto, ID_detallesProd, cantidad) VALUES (?, ?, ?, ?)";
                     try (PreparedStatement insertStatement = conn.prepareStatement(insertCarrito)) {
-                        insertStatement.setInt(1, 100);
+                        insertStatement.setInt(1, idcliente);
                         insertStatement.setInt(2, idProducto);
                         insertStatement.setInt(3, idDetalleProducto);
                          insertStatement.setInt(4, cantidad);

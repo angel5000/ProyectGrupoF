@@ -22,6 +22,7 @@ CREATE TABLE Roles (
 INSERT INTO Roles (NombreRol)
 VALUES ('Administrador'), ('Cliente');
 
+select*from roles
 CREATE TABLE CLIENTE(
 ID_cliente	INT PRIMARY KEY IDENTITY(100,1),
 Cedula VARCHAR (10),
@@ -43,6 +44,34 @@ ADD CONSTRAINT fk_Rol_Administrador FOREIGN KEY (Rol) REFERENCES Roles(ID_Rol);
 INSERT INTO CLIENTE (Cedula, Nombres, Apellidos, Direccion, correo_electronico, Telefono, Fecha_Nacimineto)
 VALUES ('123456789', 'Juan', 'Pérez', 'Calle 123, Ciudad', 'juan@example.com', '123-456-7890', '12/12/2000');
 
+create table UsuariosClientes(
+ID_USUCL	INT PRIMARY KEY IDENTITY(100,1),
+ID_DatosUsuario int not null,
+Usuario varchar(50)unique not null,
+Rol int not null,
+Activa char(1) not null,
+ Salt VARBINARY(32) NOT NULL,
+ HashedContrasena VARBINARY(64) NOT NULL,
+constraint Rolfk FOREIGN KEY (Rol) REFERENCES Roles(ID_Rol),
+constraint UsuarioPCTfk FOREIGN KEY (ID_DatosUsuario) REFERENCES CLIENTE(ID_cliente)
+
+);
+
+DECLARE @Salt VARBINARY(32);
+SET @Salt = CRYPT_GEN_RANDOM(32); 
+DECLARE @Contraseña NVARCHAR(MAX);
+SET @Contraseña = 'Angel123456';
+
+INSERT INTO UsuariosClientes (ID_DatosUsuario, Usuario,Rol , Activa,Salt, HashedContrasena)
+VALUES (
+    100,
+    'Juan5000',2,'A',
+    @Salt,
+    HASHBYTES('SHA2_512', CONVERT(NVARCHAR(MAX), @Salt) + @Contraseña)
+);
+
+
+
 select*from  cliente
 CREATE TABLE PROVEEDOR(
 ID_proveedor INT PRIMARY KEY IDENTITY(1,1),
@@ -62,13 +91,24 @@ NombreProducto NVARCHAR(100),
 Stock INT,
 Fecha_Ingreso date,
 Imagen varbinary(max),
-PrecioUnitario DECIMAL(10, 2)
-
+PrecioUnitario DECIMAL(10, 2),
+catalogo char
 );
+alter table INVENTARIO add catalogo char(1)
+
 /*
 alter table INVENTARIO
 add Imagen varbinary(max) */
-
+select*from CATALOGO_PRODUCTO
+update INVENTARIO set catalogo='S' where ID_Invent=1
+update INVENTARIO set catalogo='S' where ID_Invent=2
+update INVENTARIO set catalogo='S' where ID_Invent=3
+update INVENTARIO set catalogo='S' where ID_Invent=4
+update INVENTARIO set catalogo='S' where ID_Invent=5
+update INVENTARIO set catalogo='S' where ID_Invent=6
+update INVENTARIO set catalogo='S' where ID_Invent=7
+update INVENTARIO set catalogo='N' where ID_Invent=8
+update INVENTARIO set catalogo='N' where ID_Invent=9
 select*from INVENTARIO
 INSERT INTO INVENTARIO ( NombreProducto,Stock ,Fecha_Ingreso,PrecioUnitario)
 VALUES
@@ -174,6 +214,7 @@ VALUES
 VALUES
     ( 7, 11);
 	select*from inventario
+
 
 sELECT
     C.ID_cata,

@@ -6,6 +6,7 @@ package Visual;
 
 
 import Control.AdmCarrito;
+import Control.AdmCliente;
 import Control.AdmInventario;
 import Control.Admcatalog;
 import Control.Exceptions;
@@ -17,12 +18,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import model.Catalogo;
+import model.Cliente;
 
 
 
@@ -35,15 +40,27 @@ public class FrmCompras extends javax.swing.JFrame {
     /**
      * Creates new form FrmProductos
      */
+    String nomb,  ape, dir , telf,  email; int edad;
+    AdmCliente cl = new AdmCliente ();
     Admcatalog ct;
     AdmCarrito adcpr = new AdmCarrito();int cantidad=1;
       JPanel pan1 ,panft;
       SpinnerModel modelo;
-    public FrmCompras() {
+      int IDCLIENTE=0;
+    public FrmCompras( int IDCL) {
         initComponents();
+        IDCLIENTE =IDCL;
          mostrarCatalogo();
        btactu.setEnabled(false);
+        nombusu(IDCLIENTE);
     }
+
+    public FrmCompras() {
+     initComponents();
+ 
+    }
+
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,12 +73,12 @@ public class FrmCompras extends javax.swing.JFrame {
 
         jCalendar1 = new com.toedter.calendar.JCalendar();
         jPanel3 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        btperfil = new javax.swing.JButton();
+        btcersesion = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        txtnombusu = new javax.swing.JLabel();
         btcarrito = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel4 = new javax.swing.JPanel();
@@ -77,16 +94,31 @@ public class FrmCompras extends javax.swing.JFrame {
         contador = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtdesc = new javax.swing.JTextArea();
+        btcomprar = new javax.swing.JButton();
         btactu = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 153));
         setLocation(new java.awt.Point(175, 70));
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel7.setText("Cerrar Sesion");
+        btperfil.setText("Perfil");
+        btperfil.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.darkGray, null, null));
+        btperfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btperfilActionPerformed(evt);
+            }
+        });
 
-        jLabel9.setText("Perfil");
+        btcersesion.setText("Cerrar Sesion");
+        btcersesion.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.darkGray, null, null));
+        btcersesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btcersesionActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -94,31 +126,34 @@ public class FrmCompras extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel7)
-                .addGap(34, 34, 34))
+                .addComponent(btperfil, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(btcersesion, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel9))
-                .addGap(15, 15, 15))
+                    .addComponent(btperfil)
+                    .addComponent(btcersesion))
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         jLabel8.setFont(new java.awt.Font("Times New Roman", 0, 24)); // NOI18N
         jLabel8.setText("Compras");
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 204));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setText("Usuario:");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setText("Cliente:");
 
-        jLabel2.setText("NombreUsu");
+        txtnombusu.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        txtnombusu.setText("NombreUsu");
 
         btcarrito.setText("Carrito");
+        btcarrito.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, java.awt.Color.darkGray, null, null));
         btcarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btcarritoActionPerformed(evt);
@@ -133,9 +168,9 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btcarrito)
+                .addComponent(txtnombusu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 788, Short.MAX_VALUE)
+                .addComponent(btcarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15))
         );
         jPanel1Layout.setVerticalGroup(
@@ -144,14 +179,15 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel2)
+                    .addComponent(txtnombusu)
                     .addComponent(btcarrito))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        jSeparator1.setBackground(new java.awt.Color(204, 204, 255));
+        jSeparator1.setBackground(new java.awt.Color(102, 102, 102));
         jSeparator1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        jPanel4.setBackground(new java.awt.Color(255, 255, 204));
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tuercas, Tornillos y mas"));
 
         jLabel4.setText("Buscar:");
@@ -171,12 +207,13 @@ public class FrmCompras extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Orden..." }));
 
+        panelconten.setBackground(new java.awt.Color(255, 255, 204));
         panelconten.setBorder(javax.swing.BorderFactory.createTitledBorder("Catalogo"));
         panelconten.setAutoscrolls(true);
 
-        panelem.setBackground(new java.awt.Color(204, 255, 204));
+        panelem.setBackground(new java.awt.Color(153, 204, 255));
 
-        btadd.setText("Agregar");
+        btadd.setText("Agregar al carrito");
 
         pnfoto.setBackground(new java.awt.Color(204, 255, 102));
         pnfoto.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -196,6 +233,8 @@ public class FrmCompras extends javax.swing.JFrame {
         txtdesc.setRows(5);
         jScrollPane1.setViewportView(txtdesc);
 
+        btcomprar.setText("Comprar");
+
         javax.swing.GroupLayout panelemLayout = new javax.swing.GroupLayout(panelem);
         panelem.setLayout(panelemLayout);
         panelemLayout.setHorizontalGroup(
@@ -208,7 +247,9 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btadd)
+                .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btadd)
+                    .addComponent(btcomprar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(119, 119, 119))
         );
         panelemLayout.setVerticalGroup(
@@ -220,7 +261,9 @@ public class FrmCompras extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(panelemLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btadd)
-                            .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(contador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btcomprar))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(42, Short.MAX_VALUE))
@@ -309,7 +352,7 @@ public class FrmCompras extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -321,7 +364,34 @@ public class FrmCompras extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+public void nombusu(int id){
+    
+  
+    int edad2=0;
+    for(Cliente clt : cl.Mostrardatosclientes(id)){
+        txtnombusu.setText(clt.getNombres());
+        nomb=txtnombusu.getText();
+          ape=clt.getApellidos();
+         dir=clt.getDireccion();
+        telf=clt.getTelefono();
+        email=clt.getCorreoElectronico();
+         
+    
+ 
+Date fecha = new Date();
+LocalDate localDate = fecha.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
 
+        Calendar calendar = Calendar.getInstance();
+           
+        calendar.setTime(clt.getFecha_Nacimineto());
+         int añoactual = localDate.getYear();
+        // Obtener el año
+        int añonacimiento = calendar.get(Calendar.YEAR);
+edad2=añonacimiento-añoactual*-1;
+edad=edad2;
+    }
+
+}
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
      if(!txtbuscar.getText().equals("")){
@@ -394,7 +464,7 @@ public void buscar(String producto){
             // System.out.println(  catalogo.getIdcata());
             //  if(adcpr.VerificarItems(catalogo.getIdcata())!=1){
             // System.out.println(adcpr.VerificarItems(catalogo.getIdcata())+" :valor1");
-            adcpr.IngresarItemCarrito(catalogo.getIdcata(),cantidad);
+            adcpr.IngresarItemCarrito(catalogo.getIdcata(),cantidad,IDCLIENTE);
         } catch (Exceptions ex) {
             Logger.getLogger(FrmCompras.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -461,16 +531,18 @@ public void buscar(String producto){
          JLabel lbft = new JLabel();
           txtdesc = new JTextArea();
           btadd=new JButton("Agregar");
+           btcomprar=new JButton("Comprar");
           contador=new JSpinner();
           modelo =  new SpinnerNumberModel(1,  1,   100, 1);
      contador.setModel(modelo);
+      btcomprar.setName(dt.getIdcata()+"");
         btadd.setName(dt.getIdcata()+"");//SE LE ASIGNA UN TAG O NOMBRE AL BOTON PARA IDENTIFCAR EL ELEMENTO DEL CATALOGO
         btadd.addActionListener(new CatalogoActionListener(dt));//ENVIA EL OBJETO CATALOGO
       modelo.addChangeListener(new ContadorListener(contador));
       panft.setPreferredSize(new Dimension(100, 100));
        txtdesc.setPreferredSize(new Dimension(400, 80));
-        pan1.setPreferredSize(new Dimension(700, 120));
-      pan1.setBackground(new Color(107, 106, 104));
+        pan1.setPreferredSize(new Dimension(800, 130));
+      pan1.setBackground(new Color(153,204,255));
          pnfoto.setBackground(pnfoto.getBackground());
   txtdesc.setText("Nombre: "+dt.getNombre()+"\nMarca:"+dt.getMarca()+"\nDescripcion: "+dt.getDetalles()+
                         "\nPrecio: $"+dt.getPrecio());
@@ -489,7 +561,8 @@ panft.add(lbft);
     pan1.add( panft);
      pan1.add( txtdesc);
      pan1.add(contador);
- pan1.add(btadd);       
+ pan1.add(btadd);    
+  pan1.add(btcomprar);   
    panelconten.add(pan1);
   panelconten.updateUI();
  //  System.out.println(panelconten.getSize()+" "+pan1.getWidth());
@@ -501,7 +574,7 @@ panft.add(lbft);
     
     
     private void btcarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcarritoActionPerformed
-       CarritoCompras crp = new CarritoCompras();
+       CarritoCompras crp = new CarritoCompras(nomb,  ape,  dir,  telf,  email,  edad);
         crp.setVisible(true);
         
     }//GEN-LAST:event_btcarritoActionPerformed
@@ -525,6 +598,15 @@ borrarPaneles();
         
     }//GEN-LAST:event_txtbuscarKeyTyped
 
+    private void btperfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btperfilActionPerformed
+        FrmPerfilCL pf = new FrmPerfilCL( nomb,  ape, dir , telf,  email,  edad);
+        pf.setVisible(true);
+    }//GEN-LAST:event_btperfilActionPerformed
+
+    private void btcersesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btcersesionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btcersesionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -535,12 +617,13 @@ borrarPaneles();
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                 javax.swing.UIManager.setLookAndFeel("com.jtattoo.plaf.smart.SmartLookAndFeel" );
+            /*for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
-            }
+            }*/
         } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(FrmCompras.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
@@ -565,16 +648,16 @@ borrarPaneles();
     private javax.swing.JButton btactu;
     private javax.swing.JButton btadd;
     private javax.swing.JButton btcarrito;
+    private javax.swing.JButton btcersesion;
+    private javax.swing.JButton btcomprar;
+    private javax.swing.JButton btperfil;
     private javax.swing.JSpinner contador;
     private javax.swing.JButton jButton1;
     private com.toedter.calendar.JCalendar jCalendar1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -586,5 +669,6 @@ borrarPaneles();
     private javax.swing.JScrollPane scrol;
     private javax.swing.JTextField txtbuscar;
     private javax.swing.JTextArea txtdesc;
+    private javax.swing.JLabel txtnombusu;
     // End of variables declaration//GEN-END:variables
 }

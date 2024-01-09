@@ -8,6 +8,7 @@ package Control;
  *
  * @author angeldvvp
  */
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,27 +20,29 @@ import model.ConexionBD;
 
 public class AdmCliente {
     //LIST DE LA CLAS CLIENTE
-    public List<Cliente> listarClientes() {
-        List<Cliente> clientes = new ArrayList<>();
-        String query = "SELECT * FROM CLIENTE";
+    List<Cliente> clientes = new ArrayList<>();
+       
+    public List<Cliente> Mostrardatosclientes(int id) {
+        
+        String query = "{CALL  DATOSCLIENTE (?)}";
         
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
-             PreparedStatement stmt = conn.prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            
+             CallableStatement stmt = conn.prepareCall(query);
+             ) {
+             stmt.setInt(1, id);
+            stmt.execute();
+             try (ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {//RECORRIDO DE DATOS
                 Cliente cliente = new Cliente();
-                cliente.setID_cliente(rs.getInt("ID_cliente"));
                 cliente.setCedula(rs.getString("Cedula"));
                 cliente.setNombres(rs.getString("nombres"));
                 cliente.setApellidos(rs.getString("Apellidos"));
-                cliente.setRol(rs.getInt("Rol"));
                 cliente.setDireccion(rs.getString("Direccion"));
                 cliente.setCorreo_electronico(rs.getString("correo_electronico"));
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setFecha_Nacimineto(rs.getDate("Fecha_Nacimineto"));
                 clientes.add(cliente);
-            }
+            }}
         } catch (SQLException e) {
             e.printStackTrace();
         }

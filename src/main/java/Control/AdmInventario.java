@@ -30,34 +30,31 @@ public class AdmInventario {
     Inventario inv = new Inventario();
     List< Inventario> inventario = new ArrayList<>();
    ////MUESTRA CIERTOS DATOS QUE HAY EN INVENTARIO
-    public List<Inventario> inv(){
+    public List<Inventario> MostrarInventario(){
           //List<String> inventario2 = new ArrayList<>();
-        String query = "SELECT * FROM INVENTARIO";
+       String query="{CALL MOSTRARINVENTARIO}";
         
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {//RECORRIDO DE DATOS
+                inv = new Inventario();
+                  inv.setIdinven(rs.getInt("ID_Invent"));
+                inv.setNombre(rs.getString("NombreProducto"));
+                inv.setCantidad(rs.getInt("Stock"));
+                inv.setFechaingreso(rs.getDate("Fecha_Ingreso"));
+                inv.setPrecio(rs.getFloat("PrecioUnitario"));
+                 inv.setIddetal(rs.getInt("ID_DetallesPRD"));
+                 inv.setDetalles(rs.getString("Descripcion"));
+                 inv.setMarca(rs.getString("Marca"));
+               String valor=rs.getString("catalogo");
+        inv.setCatalogo(valor.charAt(0));
                 
-                 String valorColumna1 = rs.getString("NombreProducto");
-                  float valorColumna2 = rs.getFloat("PrecioUnitario");
-                  byte[] imagenBytes = rs.getBytes("Imagen");
                 
-              String datos="Nombre: "+valorColumna1+" Precio: "+valorColumna2;
-       
-        
-        BufferedImage imagen = null;
-        if (imagenBytes != null) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
-                imagen = ImageIO.read(bis);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
-        inventario.add(new Inventario(datos, imagen));
+        inventario.add(inv);
+    
     
      
                
@@ -68,6 +65,59 @@ public class AdmInventario {
         }
          return inventario;
     }
+    
+    public void IngresarCatalogo(){
+        
+        String query="{CALL MOSTRARINVENTARIO}";
+        
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {//RECORRIDO DE DATOS
+                inv = new Inventario();
+                 inv.setIdinven(rs.getInt("ID_Invent"));
+                inv.setNombre(rs.getString("NombreProducto"));
+                inv.setCantidad(rs.getInt("Stock"));
+                inv.setFechaingreso(rs.getDate("Fecha_Ingreso"));
+                inv.setPrecio(rs.getFloat("PrecioUnitario"));
+                 inv.setIddetal(rs.getInt("ID_DetallesPRD"));
+                 inv.setDetalles(rs.getString("Descripcion"));
+                 inv.setMarca(rs.getString("Marca"));
+               String valor=rs.getString("catalogo");
+        inv.setCatalogo(valor.charAt(0));
+                
+                
+
+        inventario.add(inv);
+    
+     
+               
+            }
+            
+            
+            
+            
+            
+            
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public List<String> lista(){
         String datos="";
