@@ -38,11 +38,13 @@ public class AdmFactura  {
 
                 stmt.execute();
             
-                    try (ResultSet resultSet =  stmt.getResultSet()) {
-                        if(!resultSet.next()){
+                    try (ResultSet resultSet1 =  stmt.getResultSet()) {
+                        if(!resultSet1.next()){
                             throw new Exceptions("NO SE PUDO CARGAR LOS DATOS A LA FACTURA");
                         }else{
+                             ResultSet resultSet =  stmt.getResultSet();
                         while (resultSet.next()) {
+                         
                             fact = new Factura();
                             fact.setIdfactura(resultSet.getInt("Num_Factura"));
                               fact.setFechavencimiento(resultSet.getDate("Fecha_Vencimiento"));

@@ -5,7 +5,6 @@
 package Control;
 import Visual.FrmVenta;
 import com.itextpdf.barcodes.BarcodeEAN;
-import static com.itextpdf.forms.xfdf.XfdfConstants.DEST;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -18,16 +17,11 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.UnitValue;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import model.CarCompras;
-import model.Compra;
 import model.Factura;
 
 /**
@@ -37,27 +31,28 @@ import model.Factura;
 public class GenerarFactura {
       double subtotal=0,total=0;
       BarcodeEAN barcode; PdfFormXObject barcodeObject;
-       PdfDocument pdf;String DEST ; ;
+       PdfDocument pdf; String DEST;
    public void factura(Factura dt,AdmFactura ft,int id){
-    DEST = "C:/Users/angeldvvp/Desktop/FACTURA_TUERCA_TORNILLO.pdf";
-          try{
-    pdf = new PdfDocument(new PdfWriter(DEST));
-     Document document = new Document(pdf);
+  DEST = "C:/Users/angeldvvp/Desktop/FACTURA_TUERCA_TORNILLO.pdf";//RUTA DE LA FACTURA
+          
+    try{
+    pdf = new PdfDocument(new PdfWriter(DEST));//OBJETOS PDF
+     Document document = new Document(pdf);//OBJETO DOCUMENT RECIVE EL OBJETO PDF
     
- barcode = new BarcodeEAN(pdf);
+ barcode = new BarcodeEAN(pdf);//OBJETO CODIGO DE BARRA
   
-// Agregar imagen al documento
+//ESTRUCTURA DE LA FACTURA
 
     String line = "--------------------------------------FACTURA--------------------------------------\n";
      String imageFile = "C:/Users/angeldvvp/Desktop/Proyecto_SisControl_Pernos_y_TuercaGrupoF_Venta"
-             + "/BD/imagenes/IMGFACT.PNG"; 
-ImageData data = ImageDataFactory.create(imageFile);
+             + "/BD/imagenes/IMGFACT.PNG"; //RUTA DE LA IMAGEN INCRUSTA EN EL PDF IMAGEN LOGO
+ImageData data = ImageDataFactory.create(imageFile);//CARGA DE LA IMAGEN
 Image img = new Image(data); 
 img.setWidth(328);
-img.setHeight(107);
+img.setHeight(107);//TAMAÑO DE LA IMANGEN
 img.setMarginTop(5);
-img.setMarginLeft(100);
-document.add(img);
+img.setMarginLeft(100);//CAMBIOS DE POSICION DE LA IMAGENS
+document.add(img);//SE AGREGA LA IMAGEN AL DOCUMENTO
  LocalDateTime ahora = LocalDateTime.now();
 
         // Formatear la fecha y hora como un String
@@ -69,14 +64,17 @@ document.add(img);
            
     ).setFontSize(12));
    subtotal=dt.getSubtofac();total=dt.getTotalfac();
-    
-itemfactura(document,ft,id);
+    /*DATOS PRINCIPALES DE LA FACTURA*/
+itemfactura(document,ft,id);//METODO QUE RECIBE OBJETO DOCUMENT, LA CLASE FACTURA, Y UN ID DE LA FACTURA
  
           }catch(Exception e){
              JOptionPane.showMessageDialog(null, "NO SE PUDO GENERAR LA FACTURA REVISAR RUTAS ENTRE OTROS DATOS DE ENTRADA\n"+e.getMessage());
           }
     }
+   
+   
    public void itemfactura(Document doc,AdmFactura ft,int id) throws Exceptions, Exception{
+       //METODO QUE CARGA LOS ITEMS COMPRADOS CON SUS DATOS 
         doc.add(new Paragraph( "\n-----------------------------------------------------------------\n"  ).setFontSize(10));
           doc.add(new Paragraph( "\n---------------------DESCRIPCION-------------------------------\n"  ).setFontSize(10));
           doc.add(new Paragraph( "\n"+"NOMBRE   "
@@ -85,7 +83,7 @@ itemfactura(document,ft,id);
                "         TOTAL:"+"\n"  ).setFontSize(10));
      
        for ( Factura crp :  ft.Mostrarfacturaitem(id)){
-             
+             //SE RECORRE LOS ITEMN INGRESADOS EN EL LIST POR MEDIO DEL METODO MOSTRAFACTURAITEM
     doc.add(new Paragraph(
            
     crp.getNombre().substring(0, 13)+"  "+crp.getMarca().substring(0, 5)+"    "
@@ -105,9 +103,11 @@ itemfactura(document,ft,id);
          File file = new File(DEST);
         file.getParentFile().mkdirs();
        manipulatePdf(DEST,doc);
-       //doc.close();
-       JOptionPane.showMessageDialog(null, "PAGO REALIZADO- SE GENERO SU FACTURA");
+       
+      
    }
+   
+   //CLASES DE LA CREACION DEL CODIGO DE BARRA
    protected void manipulatePdf(String dest, Document document) throws Exception {
        
         
@@ -120,10 +120,12 @@ itemfactura(document,ft,id);
         document .add(table);
 
        document .close();
+       JOptionPane.showMessageDialog(null, "PAGO REALIZADO- SE GENERO SU FACTURA");
+        
     }
    
    
-   
+   ///SGT CLASES
 private static Cell createBarcode(String code, PdfDocument pdfDoc) {
         BarcodeEAN barcode = new BarcodeEAN(pdfDoc);
         barcode.setCodeType(BarcodeEAN.EAN8);
@@ -137,9 +139,11 @@ private static Cell createBarcode(String code, PdfDocument pdfDoc) {
         cell.setPaddingLeft(10);
 
         return cell;
-    }
+    }//FIN
+
+
      public void mostrardatos(AdmFactura ft, int id) throws Exceptions{
-         
+//METODO QUE RECORRE LOS DATOS DE LA FACTURA Y LO ENVIA EN EL METODO FACTURA         
         
      try {
          for ( Factura crp :  ft.Mostrarfactura(id)){

@@ -402,14 +402,13 @@ int idcliente=0, METPAGO=1;
       vt.IngresarMETPAGO(idcliente,METPAGO);
         try {
             vt.ingresarfactura( idcliente, vt.idpago(), "A", "2025-12-12", sub, tot ,advt.idcomra());
-            System.out.println("aqui");
-                   
+                
              AdmFactura ft = new AdmFactura();
        GenerarFactura gf = new GenerarFactura();
        gf.mostrardatos(ft,idcliente);
-        } catch (Exceptions ex) {
-              JOptionPane.showMessageDialog(null, ex.getMessage());
-            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exceptions ex1) {
+              JOptionPane.showMessageDialog(null, ex1.getMessage());
+            Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex1);
         } catch (SQLException ex) {
               JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);

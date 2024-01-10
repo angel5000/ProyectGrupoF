@@ -34,10 +34,11 @@ public class AdmCliente {
              stmt.setInt(1, id);//INGRESO DE ID DEL CLIENTE
             stmt.execute();//EJECUCINO DEL QUERY
             
-             try (ResultSet rs = stmt.executeQuery()) {
-                 if(!rs.next()){
+             try (ResultSet rs1 = stmt.executeQuery()) {
+                 if(!rs1.next()){
                      throw new Exceptions("ID INCORRECTO O ALGUN ERROR EN CODIGO O BD");
-                 }
+                 }else{
+                    ResultSet rs = stmt.executeQuery();
             while (rs.next()) {//RECORRIDO DE DATOS
                 Cliente cliente = new Cliente();//OBJETO CLIENTE
                 cliente.setCedula(rs.getString("Cedula"));//DATOS CLIENTES
@@ -48,9 +49,10 @@ public class AdmCliente {
                 cliente.setTelefono(rs.getString("Telefono"));
                 cliente.setFecha_Nacimineto(rs.getDate("Fecha_Nacimineto"));
                 clientes.add(cliente);//INGRESO DE DATOS AL LIST
-            }} catch (Exceptions ex) {
+            }}} catch (Exceptions ex) {
                 Logger.getLogger(AdmCliente.class.getName()).log(Level.SEVERE, null, ex);
             }
+             
         } catch (SQLException e) {
             e.printStackTrace();
         }
