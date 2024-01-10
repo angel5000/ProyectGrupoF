@@ -58,7 +58,7 @@ int idProducto=0;int resultado=0, valor=0;
             try {
                 ByteArrayInputStream bis = new ByteArrayInputStream(imagenBytes);
                 imagen = ImageIO.read(bis);
-                //  ExcepcionIngresoCRP();
+                
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -181,62 +181,7 @@ int idProducto=0;int resultado=0, valor=0;
     }
     
     
-    //METODO QUE VERIFICA SI YA EXITES UN PRODUCTO EN EL CARRITO
-  /*  public int VerificarItems(int IDCatalogo) throws Exceptions, SQLException{
        
-     
-String consultaCatalogo = "SELECT Producto, Detalle_Producto FROM CATALOGO_PRODUCTO WHERE ID_cata = ?";
-PreparedStatement statementCatalogo = null;
-ResultSet resultSetCatalogo = null;
-
-try (Connection conn = ConexionBD.conectar()) {
-    statementCatalogo = conn.prepareStatement(consultaCatalogo);
-    statementCatalogo.setInt(1, IDCatalogo);
-    resultSetCatalogo = statementCatalogo.executeQuery();
-
-    if (resultSetCatalogo.next()) {
-        idProducto = resultSetCatalogo.getInt("Producto");
-
-        String consultaCarrito = "IF EXISTS (SELECT 1 FROM Carrito WHERE ID_Producto = ? AND ID_cliente=?) SELECT 1 ELSE SELECT 0";
-        PreparedStatement statementCarrito = null;
-        ResultSet resultSetCarrito = null;
-
-        try {
-            statementCarrito = conn.prepareStatement(consultaCarrito);
-            statementCarrito.setInt(1,idProducto);
-             statementCarrito.setInt(2,  100);
-
-            resultSetCarrito = statementCarrito.executeQuery();
-
-            if (resultSetCarrito.next()  ) {
-                // ExcepcionVerificar();
-                resultado = resultSetCarrito.getInt(1);
-                if (resultado == 1) {
-                   throw new Exceptions("Ya esta ingresado");
-                   
-                } if (resultado == 0){
-                   
-                return resultado;
-            
-                }
-            }
-            
-         
-        } catch (SQLException e) {
-            e.printStackTrace();
-            
-        } 
-    }
-} catch (SQLException e) {
-    e.printStackTrace();
- 
-}  
-        
-        return resultado;
-        
-    }
-    */
-    
     
     
     

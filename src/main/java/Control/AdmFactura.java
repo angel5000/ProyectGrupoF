@@ -29,11 +29,12 @@ public class AdmFactura  {
     Factura fact;
          List<Factura>  factura= new ArrayList<>();
   public List<Factura> Mostrarfactura(int idcliente)throws Exceptions{
-        String consultaCatalogo="{CALL MostrarDatosFactura (?)}";
-        try (Connection conn = ConexionBD.conectar();
+      //METODO QUE INGRESA Y DEVUELVE LOS DATOS DE FACTURA Y PERSONALES DEL CLIENTE
+        String consultaCatalogo="{CALL MostrarDatosFactura (?)}";//QUERY PROCEDIMINETO ALMACENADO
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
            CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
             {
-                stmt.setInt(1, idcliente);
+                stmt.setInt(1, idcliente);//ID DEL CLIENTE
 
                 stmt.execute();
             
@@ -65,40 +66,7 @@ public class AdmFactura  {
          catch (SQLException e) {
             e.printStackTrace();
         }
-       /*  String factu="{CALL ItemsFactura (?)}";
-      try (Connection conn = ConexionBD.conectar();
-           CallableStatement stmt = conn.prepareCall(factu);)
-            {
-                stmt.setInt(1, idcliente);
-                
-                 
-                stmt.execute();
-               // boolean tieneResultados =  stmt.getMoreResults();
-              //  while (tieneResultados) {
-                    try (ResultSet resultSet =  stmt.getResultSet()) {
-                        while (resultSet.next()) {
-                            
-                               fact.setNombre(resultSet.getString("NombreProducto"));
-                             fact.setMarca(resultSet.getString("Marca"));
-                             fact.setCantidad(resultSet.getInt("Cantidad"));
-                            fact.setPrecio(resultSet.getFloat("PrecioUnitario"));
-                            fact.setSubtotal(resultSet.getFloat("Subttotal_compra"));
-     fact.setTotal(resultSet.getFloat("Total_compra"));
       
-      
-        
-        
-        factura.add(fact);
-                            System.out.println(factura.toString());
-                        }
-                   // }
-                   // tieneResultados =  stmt.getMoreResults();
-                }
-            }
-         catch (SQLException e) {
-            e.printStackTrace();
-        }*/
-     
 return factura;
 }
         
@@ -106,8 +74,8 @@ return factura;
     
          List<Factura>  facturaitem= new ArrayList<>();
   public List<Factura> Mostrarfacturaitem(int idcliente)throws Exceptions{
-    
-         String factu="{CALL ItemsFactura (?)}";
+    //METODO QUE INGRESA Y DEVUELVE LOS ITEMS COMPRADOS Y SUS DATOS
+         String factu="{CALL ItemsFactura (?)}";//QUERY PROCEDIMINETO ALMACENADO
       try (Connection conn = ConexionBD.conectar();
            CallableStatement stmt = conn.prepareCall(factu);)
             {
@@ -115,8 +83,7 @@ return factura;
                 
                  
                 stmt.execute();
-               // boolean tieneResultados =  stmt.getMoreResults();
-              //  while (tieneResultados) {
+              
                     try (ResultSet resultSet =  stmt.getResultSet()) {
                         while (resultSet.next()) {
                             fact= new Factura();
@@ -133,8 +100,7 @@ return factura;
         facturaitem.add(fact);
                             System.out.println(facturaitem.toString());
                         }
-                   // }
-                   // tieneResultados =  stmt.getMoreResults();
+                  
                 }
             }
          catch (SQLException e) {

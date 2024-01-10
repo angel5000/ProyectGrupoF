@@ -43,7 +43,7 @@ int idcliente=0, METPAGO=1;
     }
 
     private FrmVenta() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       // throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
    
@@ -391,8 +391,10 @@ int idcliente=0, METPAGO=1;
                         subtotal, total);
             }
         } catch (Exceptions ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+              JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -406,14 +408,14 @@ int idcliente=0, METPAGO=1;
        GenerarFactura gf = new GenerarFactura();
        gf.mostrardatos(ft,idcliente);
         } catch (Exceptions ex) {
+              JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+              JOptionPane.showMessageDialog(null, ex.getMessage());
             Logger.getLogger(FrmVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
        
-       // ft.ingresarfactura(cpm);
-    }else{
-        JOptionPane.showMessageDialog(null,"SELECCIONE UN METODO DE PAGO");
+     
     }
         
         

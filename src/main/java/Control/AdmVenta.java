@@ -7,8 +7,7 @@ package Control;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,10 +16,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
-import model.CarCompras;
-import model.Compra;
 import model.ConexionBD;
 import model.Factura;
 
@@ -31,13 +26,13 @@ import model.Factura;
 public class AdmVenta {
  Factura fact; int idmetpago=0;
     public void IngresarMETPAGO(int idclient, int metodo){
-        String consultaCatalogo="{CALL InsertarFormaPago (?, ?,?)}";
-        try (Connection conn = ConexionBD.conectar();
+        String consultaCatalogo="{CALL InsertarFormaPago (?, ?,?)}";//QUERY
+        try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
            CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
             {
-                stmt.setInt(1, idclient);
-                stmt.setInt(2, metodo);
-                   stmt.registerOutParameter(3, java.sql.Types.INTEGER); // Configura el parámetro de salida
+                stmt.setInt(1, idclient);//INGRESO ID DEL CLIENTE
+                stmt.setInt(2, metodo);//ID INGRESO METODO DE PAGO
+                   stmt.registerOutParameter(3, java.sql.Types.INTEGER); // DEVUELVE EL ID GENERADO DE LA INSERCION
 
                
                  
@@ -58,8 +53,9 @@ public class AdmVenta {
       public  List<Factura> factura = new ArrayList<>();
     public void ingresarfactura(int idCliente,int metodoPago, String estado,
             String fechaVencimiento,double subtotal, double totalVenta ,int idCompra)throws Exceptions, SQLException{
+        //SE INGRESA LOS DATOS (IDS) EN LA TABLA FACTURA
         int numfac=0;
-     String consultaCatalogo="{CALL InsertarFactura ( ?, ?, ?, ?, ?, ?, ?,?)}";
+     String consultaCatalogo="{CALL InsertarFactura ( ?, ?, ?, ?, ?, ?, ?,?)}";//QUERY
         try (Connection conn = ConexionBD.conectar();
            CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
             {
@@ -72,7 +68,7 @@ public class AdmVenta {
                 stmt.setDouble(5, subtotal);
                 stmt.setDouble(6, totalVenta);
                 stmt.setDouble(7, idCompra);
-                stmt.registerOutParameter(8, java.sql.Types.INTEGER); // Configura el parámetro de salida
+                stmt.registerOutParameter(8, java.sql.Types.INTEGER); // DEVUELVE EL ID DE LA FACTURA
 
                  stmt.execute();
                    numfac = stmt.getInt(8);
@@ -82,18 +78,15 @@ public class AdmVenta {
                  
                 fact= new Factura();
                 
-        // Define el formato de la cadena de fecha
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 
-     
-            // Convierte la cadena de fecha a un objeto Date
             Date fecha = formato.parse(fechaVencimiento);
-  Date fechaActual = new Date();
+  Date fechaActual = new Date();//CONVERSION DE DATOS
 
         
                
                 System.out.println("Inserción exitosa.");
-               // System.out.println(factura.toString()+" "+fact.getIdUsua());
+              
             }
          catch (SQLException e) {
             e.printStackTrace();

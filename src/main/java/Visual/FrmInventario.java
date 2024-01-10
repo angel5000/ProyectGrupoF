@@ -5,28 +5,24 @@
 package Visual;
 
 import Control.AdmInventario;
+import Control.Exceptions;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.AbstractCellEditor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.event.ListSelectionListener;;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import model.CarCompras;
 import model.Inventario;
 
 /**
@@ -39,7 +35,7 @@ DefaultTableModel TB;
     /**
      * Creates new form FrmInventario
      */
-    public FrmInventario() {
+    public FrmInventario()throws Exceptions {
         initComponents();
         mostrarinventario();
         
@@ -61,7 +57,7 @@ DefaultTableModel TB;
                        
                     }
                 }
-               // lbmsj.setText("");
+               
             }
         });
         
@@ -79,26 +75,34 @@ DefaultTableModel TB;
      */
     @SuppressWarnings("unchecked")
     
-    public void mostrarinventario(){
+    public void mostrarinventario() throws Exceptions{
         
     
         TB = (DefaultTableModel)  TableProducto1.getModel();
             TB.setRowCount(0);
     TableProducto1.setRowSelectionAllowed(true);
-TableProducto1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-       
+TableProducto1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);//PERMITE SELECCION MULTIPLE
+       try{
         for(Inventario dt:avt.MostrarInventario()){
+            //INGRESO DE LOS DATOS A SUS FILAS
             Object[] fila = {false,dt.getIdinven(),dt.getIddetal(),dt.getNombre(),dt.getDetalles(),dt.getPrecio(),dt.getCantidad(),dt.getFechaingreso(),dt.getCatalogo()};
              TB.addRow(fila);
-         //  TableProducto1.getColumnModel().getColumn(0 ).setCellEditor( new Celda_CheckBox() );
-          // TableProducto1.getColumnModel().getColumn(  0 ).setCellRenderer(new Render_CheckBox());
              TB.fireTableDataChanged();
-             TableColumn tc = TableProducto1.getColumnModel().getColumn(0);
-tc.setCellEditor( TableProducto1.getDefaultEditor(Boolean.class));
-tc.setCellRenderer( TableProducto1.getDefaultRenderer(Boolean.class));
+             
+             TableColumn tc = TableProducto1.getColumnModel().getColumn(0); /*AGREGA EL CHECKBOX AL JTABLE*/
+tc.setCellEditor( TableProducto1.getDefaultEditor(Boolean.class));     /*AGREGA EL CHECKBOX AL JTABLE*/
+tc.setCellRenderer( TableProducto1.getDefaultRenderer(Boolean.class));   /*AGREGA EL CHECKBOX AL JTABLE*/
         }  
-        
+       }catch(Exceptions ex){
+           JOptionPane.showMessageDialog(null, ex.getMessage());
+       }
     }
+    
+    
+    ////CLASES QUE AGREGAN Y MANIPULAN CHECKBOX DEL JTABLE
+    
+    
+    
     public class Celda_CheckBox extends DefaultCellEditor implements TableCellRenderer,ItemListener {
 
     private JComponent component = new JCheckBox();    
@@ -177,28 +181,7 @@ tc.setCellRenderer( TableProducto1.getDefaultRenderer(Boolean.class));
       ( (JCheckBox) component).setSelected( b );
       return ( (JCheckBox) component);
   }
-/*
-TableProducto1.getModel().addTableModelListener(new checkBoxListener());
-public class checkBoxListener implements TableModelListener {
-
-   public void tableChanged(TableModelEvent e) {
-    int fila = e.getFirstRow();
-    int columna = e.getColumn();
-    //verifica si la columna es de tipo boolean
-    if (columna == BOOLEAN_COLUMN) {
-        
-            obtenemos el modelo de la tabla
-            este te servira al igual para obtener los valores de tu tabla,
-            dependiendo de la fila y columna que desees tomar.
-        
-        TB = (TableModel) e.getSource();
-        Boolean checked = (Boolean) TB.getValueAt(fila, columna);
-        //verifica si esta seleccionada
-        if (checked) {
-            //aqui haces la insercion del registro a una nueva tabla
-        }
-   }
-}*/
+////////FIN DE LA CLASE
  
 
   
@@ -608,7 +591,11 @@ public class checkBoxListener implements TableModelListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmInventario().setVisible(true);
+                try {
+                    new FrmInventario().setVisible(true);
+                } catch (Exceptions ex) {
+                    Logger.getLogger(FrmInventario.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

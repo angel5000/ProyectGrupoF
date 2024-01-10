@@ -25,15 +25,15 @@ public class AdmCompras {
 Compra Comp;
    
  public void IngresarPrecompra(CarCompras cmpr )throws Exceptions{
-     
+     //METODO QUE RECIVE LOS DATOS DEL CARRITO
        crp = cmpr;
      carrito.add(crp);
-     System.out.println("metodo: "+crp.getNombre());
+    
     
 }    
 
     public List<CarCompras> MostrarPrecompra()throws Exceptions{
-     
+     //METODO QUE DEVUELVE LOS DATOS DEL CARRITO EN LA PARTE DE VENTA
 return carrito;
 }
 public void ingresarcodcompra(int idclient){
@@ -53,13 +53,14 @@ public void ingresarcodcompra(int idclient){
         }
 }
    public int idcomra(){
+       //DEVUELVE EL ID DE LA COMPRA PARA PODER SER REGISTRADA COMO UN SOLO REGISTRO DE VARIOS.
        return idcompra;
    }
     public void ingresarcompra(int idclient,int idproducto, int iddetaprod,int cantidad,
             double preciounit,double subto, double total) throws SQLException{
-         
+         //METODO QUE INGRESA LA COMPRA DEL CLIENTE
         
-        String consultaCatalogo="{CALL InsertarCompra (?, ?, ?, ?, ?, ?, ?,?)}";
+        String consultaCatalogo="{CALL InsertarCompra (?, ?, ?, ?, ?, ?, ?,?)}";//QUERY 
         try (Connection conn = ConexionBD.conectar();
            CallableStatement stmt = conn.prepareCall(consultaCatalogo);)
             {
@@ -71,9 +72,9 @@ public void ingresarcodcompra(int idclient){
                 stmt.setDouble(6, subto);
                 stmt.setDouble(7, total);
                  stmt.setInt(8, idcomra());
-Comp= new Compra();
+Comp= new Compra();//OBJETO DE LA CLASE
            
-             Comp.setIdcompra(idcompra);
+             Comp.setIdcompra(idcompra); //INGRESO DE DATOS DE LA CLASE
              Comp.setSubtotal(subto);
               Comp.setTotal(total);
        compras.add(Comp);

@@ -29,16 +29,21 @@ import model.Inventario;
 public class AdmInventario {
     Inventario inv = new Inventario();
     List< Inventario> inventario = new ArrayList<>();
-   ////MUESTRA CIERTOS DATOS QUE HAY EN INVENTARIO
-    public List<Inventario> MostrarInventario(){
-          //List<String> inventario2 = new ArrayList<>();
-       String query="{CALL MOSTRARINVENTARIO}";
+   ////MUESTRA LOS DATOS DE INVENTARIO
+    public List<Inventario> MostrarInventario()throws Exceptions{
+         
+       String query="{CALL MOSTRARINVENTARIO}";//QUERY
         
         try (Connection conn = ConexionBD.conectar();//CONEXION HACIA LA BD
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
             
+            if(!rs.next()){
+                throw new Exceptions("INVENTARIO VACIO - SIN DATOS");
+            }
             while (rs.next()) {//RECORRIDO DE DATOS
+                
+                
                 inv = new Inventario();
                   inv.setIdinven(rs.getInt("ID_Invent"));
                 inv.setNombre(rs.getString("NombreProducto"));
@@ -53,7 +58,7 @@ public class AdmInventario {
                 
                 
 
-        inventario.add(inv);
+        inventario.add(inv);//INGRESO DE DATOS EN EL LIST
     
     
      

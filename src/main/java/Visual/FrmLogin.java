@@ -162,12 +162,13 @@ int id=0;
 
                 String contrasena= new String(passwordChars);
     try {
-        id= us.Login(txtusu.getText(), contrasena);
+        id= us.Login(txtusu.getText(), contrasena);//METODO ENVIA EL USUARIO Y CONTRASEÑA A LA CLASE ADMUSUARIO
     } catch (Exceptions ex) {
         JOptionPane.showMessageDialog(null,ex.getMessage());
         Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
     }
         if(id!=0){
+            //SI DEVUELVE EL ID DA ACCESO A LA INTERFAZ DE COMPRA 
             FrmCompras cpr = new FrmCompras(id);
             cpr.setVisible(true);
         }
