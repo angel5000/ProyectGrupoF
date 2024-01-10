@@ -90,12 +90,16 @@ BEGIN
      inner join Detalles_Productos c on i.ID_Invent=c.ProductoID
 END;
 exec MOSTRARINVENTARIO
-CREATE PROCEDURE DETALLESPRODUC
-   
+
+create PROCEDURE DATOSCLIENTE
+    @ID_Cliente INT
 AS
 BEGIN
-   SELECT ID_DetallesPRD,Descripcion, Marca FROM Detalles_Productos
+   SELECT Cedula,nombres,Apellidos,Direccion,Telefono,correo_electronico,Fecha_Nacimineto FROM CLIENTE where ID_cliente=@ID_Cliente;
 END;
+
+
+
 
 SELECT*FROM INVENTARIO
 select*from Detalles_Productos
